@@ -40,21 +40,25 @@ def inversionMutation(individual,indpb):
         begSubtour = random.randint(0, len(individual)-1)
         endSubtour = random.randint(begSubtour, len(individual)-1)
 
-        #print begSubtour , endSubtour
-
-        #save the Subtour
+        #extract the Subtour and reverse it
         Subtour = individual[begSubtour:endSubtour]
+        Subtour.reverse()
 
-        #remove it from individual
+        #remove Subtour from individual
         del individual[begSubtour:endSubtour]
 
         #compute where to insert it
         insertionPos = random.randint(0, len(individual)-1)
 
-        #create the new individual by inserting the Subtour
+        #create the new individual by inserting the Subtour at the insertion position
         individual[:] = individual[0:insertionPos] + Subtour + individual[insertionPos:]
 
     return individual
+
+def reverseMutation(individual, indpb):
+    if(random.random()>indpb):
+        pass
+
 
 # gr*.json contains the distance map in list of list style in JSON format
 tsp = json.load(open("gr17.json", "r"))
