@@ -4,7 +4,7 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
-from gaproject.data import get_data
+from gaproject import get_data
 
 
 def main():
