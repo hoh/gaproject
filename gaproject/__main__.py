@@ -14,6 +14,7 @@ def main():
     box = Box('data/TSPBenchmark')
     # data = box.get('belgiumtour.tsp')
     data = box.get('xqf131.tsp')
+
     # print data.positions
     # print data.dist_matrix()
     # print len(data)
@@ -35,6 +36,7 @@ def main():
 
     pop, stats, hof = mydeap.run(toolbox)
 
+    # Plotting the best result so far:
     analysis.plot(hof[0], data)
 
 

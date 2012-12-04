@@ -23,7 +23,9 @@ class MyDeap(object):
         return creator
 
     def toolbox(self, ind_size, evaluator):
-        "Creating the toolbox."
+        """Creating the toolbox.
+        Where evaluator is the evaluation function.
+        """
 
         toolbox = base.Toolbox()
 
@@ -55,11 +57,7 @@ class MyDeap(object):
         pop = toolbox.population(n=300)
 
         hof = tools.HallOfFame(1)
-        stats = tools.Statistics(lambda ind: ind.fitness.values)
-        stats.register("avg", tools.mean)
-        stats.register("std", tools.std)
-        stats.register("min", min)
-        stats.register("max", max)
+        stats = self.stats()
 
         algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 5000, stats=stats,
                             halloffame=hof)
