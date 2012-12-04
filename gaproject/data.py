@@ -20,8 +20,13 @@ class Data(object):
 
     def plot(self):
         import matplotlib.pyplot as plt
-        plt.plot([1,2,3,4], [1,4,9,16], 'ro')
-        plt.axis([0, 6, 0, 20])
+
+        positions = list(self.positions())
+        x_axis = [pos[0] for pos in positions]
+        y_axis = [pos[1] for pos in positions]
+
+        plt.plot(x_axis, y_axis, 'bx')
+        plt.show()
 
 
 class Box(object):
