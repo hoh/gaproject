@@ -33,6 +33,28 @@ def insertionMutation(individual,indpb):
         individual.insert(insertionPoint,removedValue)
     return individual
 
+def inversionMutation(individual,indpb):
+    #chose a Subtour then insert it at a different part of the individual
+    if(random.random()>indpb):
+        #compute the beginning and end of the Subtour.
+        begSubtour = random.randint(0, len(individual)-1)
+        endSubtour = random.randint(begSubtour, len(individual)-1)
+
+        #print begSubtour , endSubtour
+
+        #save the Subtour
+        Subtour = individual[begSubtour:endSubtour]
+
+        #remove it from individual
+        del individual[begSubtour:endSubtour]
+
+        #compute where to insert it
+        insertionPos = random.randint(0, len(individual)-1)
+
+        #create the new individual by inserting the Subtour
+        individual[:] = individual[0:insertionPos] + Subtour + individual[insertionPos:]
+
+    return individual
 
 # gr*.json contains the distance map in list of list style in JSON format
 tsp = json.load(open("gr17.json", "r"))
@@ -58,7 +80,7 @@ def evalTSP(individual):
     return distance,
 
 toolbox.register("mate", tools.cxPartialyMatched)
-toolbox.register("mutate", insertionMutation, indpb=0.50)
+toolbox.register("mutate", inversionMutation, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("evaluate", evalTSP)
 
