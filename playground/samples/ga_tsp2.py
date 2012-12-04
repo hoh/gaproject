@@ -24,8 +24,17 @@ from deap import base
 from deap import creator
 from deap import tools
 
+def insertionMutation(individual,indpb):
+    #chose an individual randomly and insert it at a random position
+    if(random.random()>indpb):
+        indexRandomNode = random.randint(0, len(individual)-1)
+        insertionPoint = random.randint(0, len(individual)-1)
+        removedValue=individual.pop(indexRandomNode)  
+        individual.insert(insertionPoint,removedValue)
+    return individual
+
+
 # gr*.json contains the distance map in list of list style in JSON format
-# Optimal solutions are : gr17 = 2085, gr24 = 1272, gr120 = 6942
 tsp = json.load(open("gr17.json", "r"))
 distance_map = tsp["DistanceMatrix"]
 IND_SIZE = tsp["TourSize"]
@@ -49,9 +58,12 @@ def evalTSP(individual):
     return distance,
 
 toolbox.register("mate", tools.cxPartialyMatched)
-toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
+toolbox.register("mutate", insertionMutation, indpb=0.50)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("evaluate", evalTSP)
+
+
+#def simpleInversionMutation(individual):
 
 def main():
     random.seed(169)
