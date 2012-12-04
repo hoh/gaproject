@@ -25,7 +25,9 @@ from deap import creator
 from deap import tools
 
 def insertionMutation(individual,indpb):
-    #chose an individual randomly and insert it at a random position
+    """
+    chose an individual randomly and insert it at a random position
+    """
     if(random.random()>indpb):
         indexRandomNode = random.randint(0, len(individual)-1)
         insertionPoint = random.randint(0, len(individual)-1)
@@ -34,7 +36,9 @@ def insertionMutation(individual,indpb):
     return individual
 
 def inversionMutation(individual,indpb):
-    #chose a Subtour then insert it reversed at a different part of the individual
+    """
+    chose a Subtour then insert it reversed at a different part of the individual
+    """
     if(random.random()>indpb):
         #compute the beginning and end of the Subtour.
         begSubtour = random.randint(0, len(individual)-1)
@@ -56,7 +60,9 @@ def inversionMutation(individual,indpb):
     return individual
 
 def simpleInversionMutation(individual, indpb):
-    #chose a Subtour then reverse it at a different part of the individual
+    """
+    chose a Subtour then reverse it at a different part of the individual
+    """
     if(random.random()>indpb):
         begSubtour = random.randint(0, len(individual)-1)
         endSubtour = random.randint(begSubtour, len(individual)-1)
@@ -70,7 +76,7 @@ def simpleInversionMutation(individual, indpb):
 
     return individual
 
-
+def cxERX(individual1,individual2)
 
 # gr*.json contains the distance map in list of list style in JSON format
 tsp = json.load(open("gr17.json", "r"))
@@ -100,12 +106,9 @@ toolbox.register("mutate", simpleInversionMutation, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("evaluate", evalTSP)
 
-
-#def simpleInversionMutation(individual):
-
 def main():
     random.seed(169)
-
+    
     pop = toolbox.population(n=300)
 
     hof = tools.HallOfFame(1)
