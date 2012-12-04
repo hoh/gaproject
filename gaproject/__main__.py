@@ -11,8 +11,7 @@ def main():
     print 'Starting...'
     box = Box('data/TSPBenchmark')
     data = box.get('belgiumtour.tsp')
-    print list(data.positions())
-    data.plot()
+    print data.positions
 
 if __name__ == '__main__':
     main()
