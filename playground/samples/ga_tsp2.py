@@ -76,7 +76,59 @@ def simpleInversionMutation(individual, indpb):
 
     return individual
 
-def cxERX(individual1,individual2)
+def cxERX(individual1,individual2):
+    """
+    ERX performs a crossover that tries to pass to the next generation the common edges of the parents.
+    ERX returns one individual only.
+    """
+    edgeMap = {}
+    #build the edgemap
+    for node in individual1:
+        pos1 = individual1.index(node)
+        pos2 = individual2.index(node)
+        neighborg1 = individual1[(pos1-1) % len(individual1)]
+        neighborg2 = individual1[(pos1+1) % len(individual1)]
+        neighborg3 = individual2[(pos2-1) % len(individual2)]
+        neighborg4 = individual2[(pos2+1) % len(individual2)]
+        edgeMap[node]=set([neighborg1,neighborg2,neighborg3,neighborg4])
+
+    child = creator.Individual()
+    #step1
+    currentNode = individual1[random.randint(0,len(individual1)-1)]
+    while True:
+        child.append(currentNode)
+        #extract the nodes linked to current node
+        neighborgs = edgeMap.pop(currentNode)
+        neighborgs = list(neighborgs)
+        #remove references to the current node
+        cleanupNodeFromEdgeMap(edgeMap, currentNode)
+        if neighborgs != []:
+            #find which neighborg node has the less edges
+            currentNeighborg = neighborgs[0]
+            currentLen = len(edgeMap[currentNeighborg])
+            for neighborg in neighborgs:
+                if len(edgeMap[neighborg]) < currentLen:
+                    currentLen = len(edgeMap[neighborg])
+                    currentNeighborg = neighborg
+            #the neighborg with the less edges is the next node in the child
+            currentNode = currentNeighborg
+        else:
+            if edgeMap == {}: 
+                break #if there are no more nodes to assign then stop
+            else:
+                #chose as next node any remaining node at random
+                currentNode = edgeMap.keys()[random.randint(0,len(edgeMap.keys())-1)]
+    return child
+
+def cleanupNodeFromEdgeMap(edgeMap,referenceNode):
+    edgeMapEntriesToBeRemoved = []
+    for node in edgeMap:
+        if referenceNode in edgeMap[node]:
+            edgeMap[node].remove(referenceNode)
+        if edgeMap[node] == set():
+            edgeMapEntriesToBeRemoved.append(node)
+    for node in edgeMapEntriesToBeRemoved:
+            edgeMapEntriesToBeRemoved.remove(node)
 
 # gr*.json contains the distance map in list of list style in JSON format
 tsp = json.load(open("gr17.json", "r"))
@@ -101,15 +153,22 @@ def evalTSP(individual):
         distance += distance_map[gene1][gene2]
     return distance,
 
-toolbox.register("mate", tools.cxPartialyMatched)
+toolbox.register("mate", cxERX)
 toolbox.register("mutate", simpleInversionMutation, indpb=0.05)
 toolbox.register("select", tools.selTournament, tournsize=3)
 toolbox.register("evaluate", evalTSP)
 
 def main():
+
+    # ind1 = creator.Individual()
+    # ind2 = creator.Individual()
+    # ind1[:] = array.array('i',[1,2,3,4,5,6,7,8,9])
+    # ind2[:] = array.array('i',[4,1,2,8,7,6,9,3,5]) 
+    # print cxERX(ind1,ind2)
+
     random.seed(169)
     
-    pop = toolbox.population(n=300)
+    pop = toolbox.population(n=500)
 
     hof = tools.HallOfFame(1)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
