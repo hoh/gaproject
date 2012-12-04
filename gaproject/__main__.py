@@ -4,12 +4,14 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
-from gaproject import get_data
+from gaproject.data import Box
 
 
 def main():
     print 'Starting...'
-    #data = get_data('data')
+    box = Box('data/TSPBenchmark')
+    data = box.get('belgiumtour.tsp')
+    print [i for i in data.positions()]
 
 if __name__ == '__main__':
     main()
