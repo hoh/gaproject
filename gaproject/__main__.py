@@ -12,6 +12,7 @@ def main():
     box = Box('data/TSPBenchmark')
     data = box.get('belgiumtour.tsp')
     print data.positions
+    print data.dist_matrix()
 
 if __name__ == '__main__':
     main()
