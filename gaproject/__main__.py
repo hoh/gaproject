@@ -13,6 +13,7 @@ def main():
     data = box.get('belgiumtour.tsp')
     print data.positions
     print data.dist_matrix()
+    print len(data)
 
 if __name__ == '__main__':
     main()

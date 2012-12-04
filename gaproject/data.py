@@ -33,6 +33,7 @@ class Data(object):
         return matrix
 
     def plot(self):
+        "Uses Matplotib to plot the nodes positions."
         import matplotlib.pyplot as plt
 
         x_axis = [pos[0] for pos in self.positions]
@@ -40,6 +41,14 @@ class Data(object):
 
         plt.plot(x_axis, y_axis, 'bx')
         plt.show()
+
+    def size(self):
+        "Return the size of the current data."
+        return len(self.positions)
+
+    # ----- Special type functions: -----
+    # Length:
+    __len__ = size
 
 
 class Box(object):
