@@ -1,6 +1,13 @@
 
 import os.path
 import csv
+import math
+
+
+def dist(point1, point2):
+    return math.sqrt(
+        abs(point1[0] - point2[0]) ** 2 \
+      + abs(point1[1] - point2[1]) ** 2)
 
 
 class Data(object):
@@ -8,22 +15,28 @@ class Data(object):
 
     def __init__(self, path):
         self.path = path
+        self.positions = list(self.load())
 
-    def positions(self):
+    def load(self):
         "Returns a list with the coordinates of each point."
         for line in csv.reader(open(self.path), delimiter='\t'):
             yield float(line[0]), float(line[1])
 
     def dist_matrix(self):
         "Returns a distance matrix between all points."
-        raise NotImplementedError
+        matrix = []
+        for point1 in self.positions:
+            line = []
+            for point2 in self.positions:
+                line.append(dist(point1, point2))
+            matrix.append(line)
+        return matrix
 
     def plot(self):
         import matplotlib.pyplot as plt
 
-        positions = list(self.positions())
-        x_axis = [pos[0] for pos in positions]
-        y_axis = [pos[1] for pos in positions]
+        x_axis = [pos[0] for pos in self.positions]
+        y_axis = [pos[1] for pos in self.positions]
 
         plt.plot(x_axis, y_axis, 'bx')
         plt.show()
