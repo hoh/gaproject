@@ -1,6 +1,6 @@
 
 import os.path
-import csv
+import re
 import math
 
 
@@ -19,7 +19,10 @@ class Data(object):
 
     def load(self):
         "Returns a list with the coordinates of each point."
-        for line in csv.reader(open(self.path), delimiter='\t'):
+        for line in open(self.path).readlines():
+            # Clearing the line
+            line = line.strip().replace('\t', ' ').replace('  ', ' ')
+            line = line.split()
             yield float(line[0]), float(line[1])
 
     def dist_matrix(self):
