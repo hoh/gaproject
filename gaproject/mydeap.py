@@ -14,6 +14,9 @@ from deap import tools
 class MyDeap(object):
     "Class for generic setup of DEAP in our problem."
 
+    def __init__(self):
+        self.creator()
+
     def creator(self):
         "Setting up the creator."
 
@@ -60,7 +63,7 @@ class MyDeap(object):
         hof = tools.HallOfFame(1)
         stats = self.stats()
 
-        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 5000, stats=stats,
+        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 500, stats=stats,
                             halloffame=hof)
 
         return pop, stats, hof

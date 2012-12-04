@@ -6,38 +6,27 @@ This is the main file of the project, used to setup and launch the computation.
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
-import gaproject.analysis as analysis
+from gaproject.analysis import plot
+
+from gaproject.functions.evaluators import Evaluators
 
 
 def main():
-    print 'Starting...'
     box = Box('data/TSPBenchmark')
-    # data = box.get('belgiumtour.tsp')
-    data = box.get('xqf131.tsp')
+    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
 
-    # print data.positions
-    # print data.dist_matrix()
-    # print len(data)
     # data.plot()
 
     distance_map = data.dist_matrix()
+    evalTSP = Evaluators(distance_map).evalTSP
 
-    def evalTSP(individual):
-        distance = distance_map[individual[-1]][individual[0]]
-        for gene1, gene2 in zip(individual[0:-1], individual[1:]):
-            distance += distance_map[gene1][gene2]
-        return distance,
-
+    # Running the DEAP:
     mydeap = MyDeap()
-    print mydeap.creator()
-    print mydeap.toolbox(len(data), evalTSP)
-
     toolbox = mydeap.toolbox(len(data), evalTSP)
-
     pop, stats, hof = mydeap.run(toolbox)
 
     # Plotting the best result so far:
-    analysis.plot(hof[0], data)
+    plot(hof[0], data)
 
 
 if __name__ == '__main__':
