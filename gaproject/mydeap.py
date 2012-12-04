@@ -24,7 +24,8 @@ class MyDeap(object):
 
     def toolbox(self, ind_size, evaluator):
         """Creating the toolbox.
-        Where evaluator is the evaluation function.
+        - evaluator : evaluation function
+        - ind_size : the size of an individual for initialization
         """
 
         toolbox = base.Toolbox()
