@@ -1,6 +1,5 @@
 
 import os.path
-import re
 import math
 
 
@@ -35,14 +34,14 @@ class Data(object):
             matrix.append(line)
         return matrix
 
-    def plot(self):
+    def plot(self, mode='bo'):
         "Uses Matplotib to plot the nodes positions."
         import matplotlib.pyplot as plt
 
         x_axis = [pos[0] for pos in self.positions]
         y_axis = [pos[1] for pos in self.positions]
 
-        plt.plot(x_axis, y_axis, 'bx')
+        plt.plot(x_axis, y_axis, mode)
         plt.show()
 
     def size(self):

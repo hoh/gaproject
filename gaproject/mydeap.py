@@ -61,7 +61,7 @@ class MyDeap(object):
         stats.register("min", min)
         stats.register("max", max)
 
-        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 2000, stats=stats,
+        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 5000, stats=stats,
                             halloffame=hof)
 
         return pop, stats, hof

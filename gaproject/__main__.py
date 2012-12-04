@@ -6,6 +6,7 @@ This is the main file of the project, used to setup and launch the computation.
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
+import gaproject.analysis as analysis
 
 
 def main():
@@ -16,6 +17,7 @@ def main():
     # print data.positions
     # print data.dist_matrix()
     # print len(data)
+    # data.plot()
 
     distance_map = data.dist_matrix()
 
@@ -33,6 +35,8 @@ def main():
 
     pop, stats, hof = mydeap.run(toolbox)
 
+    analysis.plot(hof[0], data)
+
 
 if __name__ == '__main__':
-    main()
+    hof = main()
