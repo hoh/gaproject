@@ -15,9 +15,9 @@ I propose to drop adjacent representation after this and just explain that we ar
 
 <h2>Parent Selection Comparison</h2>
 
--Try roulette wheel (toolbox)
--Boltzman tournament (modify the T parameter) [TBI]
--k,q tournament (see session 3 of exercises) Remember to do runs with limit values then progress e.g K=1 to K = 20 or more [TBI]
+<li>Try roulette wheel (toolbox)</li>
+<li>Boltzman tournament (modify the T parameter) [TBI]</li>
+<li>k,q tournament (see session 3 of exercises) Remember to do runs with limit values then progress e.g K=1 to K = 20 or more [TBI]</li>
 
 For each method measure the improvements when playing with the corresponding parameters AND measure the impact of the elitism! (ok?)
 
@@ -26,10 +26,10 @@ I propose to measure the influence of parent selection fixing OX crossover and n
 I think after this we could fix the parent comparison values
 
 <h2>Crossover (no Mutation)</h2>
--PMX
--OX
--ERX
--SCX [TBI]
+<li>PMX</li>
+<li>OX</li>
+<li>ERX</li>
+<li>SCX[TBI]</li>
 
 Individually: Check the influence of any adjustable parameters if any.
 Together: compare which one performs better for same parameters
@@ -37,10 +37,10 @@ Together: compare which one performs better for same parameters
 <h2>Mutation</h2>
 
 Without any crossover
--simple inversion
--inversion
--insertion
--index shuffling
+<li>simple inversion</li>
+<li>inversion</li>
+<li>insertion</li>
+<li>index shuffling</li>
 
 Individually: Check the influence of any adjustable parameters, mainly the probability of mutation.
 -loop removal? Can we add this on top of other operators and evaluate it separately?
