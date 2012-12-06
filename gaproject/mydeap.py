@@ -25,11 +25,20 @@ class MyDeap(object):
 
         return creator
 
-    def toolbox(self, ind_size, evaluator):
+    def toolbox(self, ind_size, functions):
         """Creating the toolbox.
-        - evaluator : evaluation function
+        - functions : a dictionary of genetic functions
         - ind_size : the size of an individual for initialization
         """
+
+        # Default values for the functions:
+        all_functions = {
+            'mate': tools.cxPartialyMatched,
+            'mutate': (tools.mutShuffleIndexes, {'indpb': 0.05}),
+            'select': (tools.selTournament, {'tournsize': 3}),
+            'evaluate': None,  # This one MUST be implemented
+        }
+        all_functions.update(functions)
 
         toolbox = base.Toolbox()
 
@@ -40,10 +49,18 @@ class MyDeap(object):
         toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
-        toolbox.register("mate", tools.cxPartialyMatched)
-        toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
-        toolbox.register("select", tools.selTournament, tournsize=3)
-        toolbox.register("evaluate", evaluator)
+        for key in all_functions:
+            f = all_functions[key]
+            if type(f) is list:
+                f, args =
+
+
+            toolbox.register(key, all_functions)
+
+            toolbox.register("mate", tools.cxPartialyMatched)
+            toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
+            toolbox.register("select", tools.selTournament, tournsize=3)
+            toolbox.register("evaluate", evaluator)
 
         return toolbox
 
