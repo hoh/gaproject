@@ -81,14 +81,14 @@ class MyDeap(object):
         return stats
 
     def run(self, toolbox):
-        random.seed(169)
+        #random.seed(169)
 
         pop = toolbox.population(n=300)
 
         hof = tools.HallOfFame(1)
         stats = self.stats()
 
-        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 500, stats=stats,
+        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 100, stats=stats,
                             halloffame=hof)
 
         return pop, stats, hof
