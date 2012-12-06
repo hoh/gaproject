@@ -50,17 +50,25 @@ class MyDeap(object):
         toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
         for key in all_functions:
-            f = all_functions[key]
-            if type(f) is list:
-                f, args =
+            func = all_functions[key]
 
+            # Checking for wrong values:
+            if func is None:
+                raise ValueError('function cannot be null')
 
-            toolbox.register(key, all_functions)
+            # Extracting arguments if any:
+            if type(func) in (list, tuple):
+                func, args = func
+            else:
+                args = {}
 
-            toolbox.register("mate", tools.cxPartialyMatched)
-            toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
-            toolbox.register("select", tools.selTournament, tournsize=3)
-            toolbox.register("evaluate", evaluator)
+            # Registration:
+            toolbox.register(key, func, **args)
+
+            # toolbox.register("mate", tools.cxPartialyMatched)
+            # toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
+            # toolbox.register("select", tools.selTournament, tournsize=3)
+            # toolbox.register("evaluate", evaluator)
 
         return toolbox
 

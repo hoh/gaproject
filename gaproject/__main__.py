@@ -18,11 +18,11 @@ def main():
     # data.plot()
 
     distance_map = data.dist_matrix()
-    evalTSP = Evaluators(distance_map).evalTSP
+    functions = {'evaluate': Evaluators(distance_map).evalTSP}
 
     # Running the DEAP:
     mydeap = MyDeap()
-    toolbox = mydeap.toolbox(len(data), evalTSP)
+    toolbox = mydeap.toolbox(len(data), functions)
     pop, stats, hof = mydeap.run(toolbox)
 
     # Plotting the best result so far:
