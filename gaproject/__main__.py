@@ -30,4 +30,7 @@ def main():
 
 
 if __name__ == '__main__':
-    hof = main()
+    try:
+        hof = main()
+    except KeyboardInterrupt:
+        print 'Execution stopped.'
