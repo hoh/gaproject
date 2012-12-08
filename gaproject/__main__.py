@@ -4,15 +4,15 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
-from deap import tools
-
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot
 
 from gaproject.functions.evaluators import Evaluators
-from gaproject.functions.mutators import \
-    insertionMutation, inversionMutation, simpleInversionMutation
+from gaproject.functions.mutators import mutShuffleIndexes, \
+                                         insertionMutation, \
+                                         inversionMutation, \
+                                         simpleInversionMutation
 
 
 def main():
@@ -22,10 +22,11 @@ def main():
     # data.plot()
 
     distance_map = data.dist_matrix()
+
     functions = {'evaluate': Evaluators(distance_map).evalTSP,
 
-                 'mutate': (tools.mutShuffleIndexes, {'indpb': 0.05}),
-                 #'mutate': (insertionMutation, {'indpb': 0.05}),
+                 #'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
+                 'mutate': (insertionMutation, {'indpb': 0.05}),
                  #'mutate': (inversionMutation, {'indpb': 0.05}),
                  #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
 

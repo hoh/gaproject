@@ -5,6 +5,10 @@ Here should come the mutation functions.
 
 import random
 
+# Importing the mutator from DEAP
+from deap import tools
+mutShuffleIndexes = tools.mutShuffleIndexes
+
 
 def insertionMutation(individual, indpb):
     '''
@@ -59,3 +63,9 @@ def simpleInversionMutation(individual, indpb):
         individual[:] = individual[0:begSubtour] + Subtour + individual[endSubtour:]
 
     return individual
+
+__all__ = (mutShuffleIndexes,
+           insertionMutation,
+           inversionMutation,
+           simpleInversionMutation,
+           )
