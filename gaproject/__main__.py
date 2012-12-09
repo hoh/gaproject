@@ -22,6 +22,7 @@ def run(data, operators):
     toolbox = mydeap.toolbox(len(data), operators)
     pop, stats, hof = mydeap.run(toolbox)
 
+    print 'Best so far:', operators['evaluate'](hof[0])
     # Plotting the best result so far:
     plot(hof[0], data)
 
@@ -30,8 +31,8 @@ def main():
     'Launches all runs.'
 
     box = Box('data/TSPBenchmark')
-    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
-    # data.plot()
+    data = box.get('belgiumtour.tsp')  # or xqf131.tsp
+    data.plot()
 
     distance_map = data.dist_matrix()
 
