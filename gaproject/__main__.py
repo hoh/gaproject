@@ -15,32 +15,45 @@ from gaproject.functions.mutators import mutShuffleIndexes, \
                                          simpleInversionMutation
 
 
-def main():
-    box = Box('data/TSPBenchmark')
-    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
-
-    # data.plot()
-
-    distance_map = data.dist_matrix()
-
-    functions = {'evaluate': Evaluators(distance_map).evalTSP,
-
-                 #'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
-                 'mutate': (insertionMutation, {'indpb': 0.05}),
-                 #'mutate': (inversionMutation, {'indpb': 0.05}),
-                 #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
-
-
-                 }
-
+def run(data, operators):
+    'Launches a run for the given dataset and genetic operators'
     # Running the DEAP:
     mydeap = MyDeap()
-    toolbox = mydeap.toolbox(len(data), functions)
+    toolbox = mydeap.toolbox(len(data), operators)
     pop, stats, hof = mydeap.run(toolbox)
 
     # Plotting the best result so far:
     plot(hof[0], data)
 
+
+def main():
+    'Launches all runs.'
+
+    box = Box('data/TSPBenchmark')
+    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
+    # data.plot()
+
+    distance_map = data.dist_matrix()
+
+    operators = {'evaluate': Evaluators(distance_map).evalTSP,
+
+                 #'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
+                 'mutate': (insertionMutation, {'indpb': 0.05}),
+                 #'mutate': (inversionMutation, {'indpb': 0.05}),
+                 #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
+                 }
+
+    run(data, operators)
+
+    operators = {'evaluate': Evaluators(distance_map).evalTSP,
+
+                 'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
+                 #'mutate': (insertionMutation, {'indpb': 0.05}),
+                 #'mutate': (inversionMutation, {'indpb': 0.05}),
+                 #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
+                 }
+
+    run(data, operators)
 
 if __name__ == '__main__':
     try:
