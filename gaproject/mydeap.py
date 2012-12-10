@@ -80,7 +80,7 @@ class MyDeap(object):
         stats.register("max", max)
         return stats
 
-    def run(self, toolbox):
+    def run(self, toolbox, generations=100):
         #random.seed(169)
 
         pop = toolbox.population(n=300)
@@ -88,7 +88,7 @@ class MyDeap(object):
         hof = tools.HallOfFame(1)
         stats = self.stats()
 
-        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, 100, stats=stats,
+        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, generations, stats=stats,
                             halloffame=hof)
 
         return pop, stats, hof
