@@ -9,8 +9,9 @@ class Settings(object):
 
     def __init__(self):
         self.plot = 'plot' in sys.argv
-        self.generations = 1000
-        self.population = 300
+        self.generations = 200
+        self.population = 100
         self.loop_removal = True
+        self.repetitions = 10
 
 settings = Settings()

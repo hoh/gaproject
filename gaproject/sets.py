@@ -21,7 +21,7 @@ def get():
 
         'set2': {
             'evaluate': 'eval_simple',
-            'mutate': ('insert_mut', {'indpb': 0.05}),
+            'mutate': ('invert_mut', {'indpb': 0.05}),
         }
     }
 
