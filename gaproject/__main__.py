@@ -10,10 +10,11 @@ import pprint
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot
+import gaproject.shared as shared
 
 import gaproject.sets
 
-from gaproject.operators.evaluators import Evaluators
+from gaproject.operators.evaluators import evalTSP
 
 
 def run(data, operators, plot_result=False):
@@ -27,7 +28,7 @@ def run(data, operators, plot_result=False):
 
     print 'Best so far:', operators['evaluate'](hof[0])
 
-    if plot_result:
+    if shared.settings.plot:
         # Plotting the best result so far:
         plot(hof[0], data)
 
@@ -45,11 +46,12 @@ def main(plot=False):
     box = Box('data/TSPBenchmark')
     data = box.get('belgiumtour.tsp')  # or xqf131.tsp
 
-    if plot:
+    if shared.settings.plot:
         data.plot()
 
     distance_map = data.dist_matrix()
-    evaluator = Evaluators(distance_map).evalTSP
+    shared.distance_map = distance_map
+    evaluator = evalTSP
 
     results = {}
 

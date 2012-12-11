@@ -4,27 +4,25 @@ run.
 '''
 
 from gaproject.operators import alias
-# from gaproject.store import Store
 
+# from gaproject.store import Store
 # future:
 # def insert(...)
 #     'inserts values in db'
 #
-# def get(names):
-#     'returns values from db'
 
 
 def get():
     return {
         'set1': {
+            'evaluate': 'eval_simple',
             'mutate': 'mutshuf',
             }
     }
 
 
 def evaluate(set):
-    result = {}
-    # for key in ('mutate',):
-    #     nickname = set[key]
-    #     result[key] = alias[nickname]
+    result = {
+        'mutate': (alias[set['mutate']], {'indpb': 0.05}),
+        }
     return result
