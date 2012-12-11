@@ -45,13 +45,10 @@ def main(plot=False):
 
     box = Box('data/TSPBenchmark')
     data = box.get('belgiumtour.tsp')  # or xqf131.tsp
+    shared.distance_map = data.dist_matrix()
 
     if shared.settings.plot:
         data.plot()
-
-    distance_map = data.dist_matrix()
-    shared.distance_map = distance_map
-    evaluator = evalTSP
 
     results = {}
 
@@ -59,7 +56,6 @@ def main(plot=False):
     for b in sets:
         set_b = sets[b]
         operators = gaproject.sets.evaluate(set_b)
-        operators['evaluate'] = evaluator
 
         result = run(data, operators)
         results[b] = result

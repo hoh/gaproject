@@ -17,12 +17,18 @@ def get():
         'set1': {
             'evaluate': 'eval_simple',
             'mutate': 'mutshuf',
-            }
+            },
+
+        'set2': {
+            'evaluate': 'eval_simple',
+            'mutate': 'simple_inv',
+        }
     }
 
 
 def evaluate(set):
     result = {
+        'evaluate': alias[set['evaluate']],
         'mutate': (alias[set['mutate']], {'indpb': 0.05}),
         }
     return result
