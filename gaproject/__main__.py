@@ -4,7 +4,6 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
-import sys
 import pprint
 
 from gaproject.data import Box
@@ -21,7 +20,9 @@ def run(data, operators):
     # Running the DEAP:
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
-    pop, stats, hof = mydeap.run(toolbox, 100)
+    pop, stats, hof = mydeap.run(toolbox,
+                                 shared.settings.generations,
+                                 shared.settings.population)
 
     print 'Best so far:', operators['evaluate'](hof[0])
 
