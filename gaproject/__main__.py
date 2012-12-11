@@ -14,12 +14,9 @@ import gaproject.shared as shared
 
 import gaproject.sets
 
-from gaproject.operators.evaluators import evalTSP
 
-
-def run(data, operators, plot_result=False):
+def run(data, operators):
     '''Launches a run for the given dataset and genetic operators.
-    - plot : True if we want to plot the result.
     '''
     # Running the DEAP:
     mydeap = MyDeap()
@@ -40,7 +37,7 @@ def run(data, operators, plot_result=False):
             }
 
 
-def main(plot=False):
+def main():
     'Launches all runs.'
 
     box = Box('data/TSPBenchmark')
@@ -60,14 +57,14 @@ def main(plot=False):
         result = run(data, operators)
         results[b] = result
 
-                    # 'average': numpy.average(scores),
-                    # 'std': numpy.std(scores),
+        # 'average': numpy.average(scores),
+        # 'std': numpy.std(scores),
 
     # Pretty printing the resulting scores:
     pprint.pprint(results)
 
 if __name__ == '__main__':
     try:
-        hof = main(plot=('plot' in sys.argv))
+        hof = main()
     except KeyboardInterrupt:
         print 'Execution stopped.'

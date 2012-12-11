@@ -16,19 +16,22 @@ def get():
     return {
         'set1': {
             'evaluate': 'eval_simple',
-            'mutate': 'mutshuf',
+            'mutate': ('mutshuf', {'indpb': 0.05}),
             },
 
         'set2': {
             'evaluate': 'eval_simple',
-            'mutate': 'simple_inv',
+            'mutate': ('simple_inv', {'indpb': 0.05}),
         }
     }
 
 
 def evaluate(set):
+
+    mut_func, mut_args = set['mutate']
+
     result = {
         'evaluate': alias[set['evaluate']],
-        'mutate': (alias[set['mutate']], {'indpb': 0.05}),
+        'mutate': (alias[mut_func], mut_args),
         }
     return result
