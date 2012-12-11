@@ -37,3 +37,7 @@ nosetests.xml
 .DS_Store
 
 gaproject/.ropeproject/
+
+gaproject.sublime-project
+
+gaproject.sublime-workspace

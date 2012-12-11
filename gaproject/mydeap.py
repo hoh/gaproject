@@ -80,10 +80,10 @@ class MyDeap(object):
         stats.register("max", max)
         return stats
 
-    def run(self, toolbox, generations=100):
+    def run(self, toolbox, generations, population):
         #random.seed(169)
 
-        pop = toolbox.population(n=300)
+        pop = toolbox.population(n=population)
 
         hof = tools.HallOfFame(1)
         stats = self.stats()
