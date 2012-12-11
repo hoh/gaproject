@@ -6,19 +6,14 @@ This is the main file of the project, used to setup and launch the computation.
 
 import sys
 import pprint
-import numpy
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot
-from gaproject.bench import bench, alias
 
-from gaproject.functions.evaluators import Evaluators
-from gaproject.functions.mutators import mutShuffleIndexes, \
-                                         insertionMutation, \
-                                         inversionMutation, \
-                                         simpleInversionMutation
-from functions.mutators import insertionMutation
+import gaproject.sets
+
+from gaproject.operators.evaluators import Evaluators
 
 
 def run(data, operators, plot_result=False):
@@ -28,7 +23,7 @@ def run(data, operators, plot_result=False):
     # Running the DEAP:
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
-    pop, stats, hof = mydeap.run(toolbox, 500)
+    pop, stats, hof = mydeap.run(toolbox, 100)
 
     print 'Best so far:', operators['evaluate'](hof[0])
 
@@ -56,10 +51,12 @@ def main(plot=False):
     distance_map = data.dist_matrix()
     evaluator = Evaluators(distance_map).evalTSP
 
-    results = []
+    results = {}
 
-    for b in bench:
-        operators = bench[b]  # !! Must resolve names first
+    sets = gaproject.sets.get()
+    for b in sets:
+        set_b = sets[b]
+        operators = gaproject.sets.evaluate(set_b)
         operators['evaluate'] = evaluator
 
         result = run(data, operators)
