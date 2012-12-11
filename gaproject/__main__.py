@@ -5,11 +5,10 @@ This is the main file of the project, used to setup and launch the computation.
 '''
 
 import random
-import pprint
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot
+from gaproject.analysis import plot, analyse
 import gaproject.shared as shared
 
 import gaproject.sets
@@ -72,7 +71,7 @@ def main():
         # 'std': numpy.std(scores),
 
     # Pretty printing the resulting scores:
-    pprint.pprint(results)
+    analyse(results)
 
 if __name__ == '__main__':
     try:

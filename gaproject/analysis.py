@@ -1,6 +1,8 @@
 
 "Module to analyze the result we've got. Eg: plot it."
 
+import pprint
+
 
 def plot(individual, data):
     "Uses Matplotib to plot the nodes positions."
@@ -13,3 +15,18 @@ def plot(individual, data):
     import matplotlib.pyplot as plt
     plt.plot(x_axis, y_axis, 'ro-')
     plt.show()
+
+
+def analyse(results):
+    import numpy
+
+    for run in results:
+        values = results[run]
+        print
+        print 'Run:', run
+        print 'Fitness average:', numpy.average(values['fitness'])
+        print 'Fitness std:', numpy.std(values['fitness'])
+        print 'n =', len(values['fitness'])
+
+    print
+    # pprint.pprint(results)
