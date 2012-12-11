@@ -14,6 +14,6 @@ alias = {
 
     'mutshuf': mutators.mutShuffleIndexes,
     'insert_mut': mutators.insertionMutation,
-    'ivert_mut': mutators.inversionMutation,
+    'invert_mut': mutators.inversionMutation,
     'simple_inv': mutators.simpleInversionMutation,
     }
