@@ -81,8 +81,6 @@ class MyDeap(object):
         return stats
 
     def run(self, toolbox, generations, population):
-        random.seed(169)
-
         pop = toolbox.population(n=population)
 
         hof = tools.HallOfFame(1)
