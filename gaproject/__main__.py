@@ -11,6 +11,7 @@ import numpy
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot
+from gaproject.bench import bench, alias
 
 from gaproject.functions.evaluators import Evaluators
 from gaproject.functions.mutators import mutShuffleIndexes, \
@@ -27,7 +28,7 @@ def run(data, operators, plot_result=False):
     # Running the DEAP:
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
-    pop, stats, hof = mydeap.run(toolbox, 50)
+    pop, stats, hof = mydeap.run(toolbox, 500)
 
     print 'Best so far:', operators['evaluate'](hof[0])
 
@@ -53,36 +54,19 @@ def main(plot=False):
         data.plot()
 
     distance_map = data.dist_matrix()
+    evaluator = Evaluators(distance_map).evalTSP
 
     results = []
 
-    operators = {'evaluate': Evaluators(distance_map).evalTSP,
+    for b in bench:
+        operators = bench[b]  # !! Must resolve names first
+        operators['evaluate'] = evaluator
 
-                 #'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
-                 'mutate': (insertionMutation, {'indpb': 0.05}),
-                 #'mutate': (inversionMutation, {'indpb': 0.05}),
-                 #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
-                 }
+        result = run(data, operators)
+        results[b] = result
 
-    scores = [run(data, operators)['fitness'][0] for i in range(10)]
-    results.append({#'operators': operators,
-                    'average': numpy.average(scores),
-                    'std': numpy.std(scores),
-                    })
-
-    operators = {'evaluate': Evaluators(distance_map).evalTSP,
-
-                 'mutate': (mutShuffleIndexes, {'indpb': 0.05}),
-                 #'mutate': (insertionMutation, {'indpb': 0.05}),
-                 #'mutate': (inversionMutation, {'indpb': 0.05}),
-                 #'mutate': (simpleInversionMutation, {'indpb': 0.05}),
-                 }
-
-    scores = [run(data, operators)['fitness'][0] for i in range(10)]
-    results.append({#'operators': operators,
-                    'average': numpy.average(scores),
-                    'std': numpy.std(scores),
-                    })
+                    # 'average': numpy.average(scores),
+                    # 'std': numpy.std(scores),
 
     # Pretty printing the resulting scores:
     pprint.pprint(results)
