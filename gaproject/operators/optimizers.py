@@ -10,6 +10,9 @@ def dist(node1, node2):
 
 
 def loop_removal(function):
+    '''To be used as a decorator on a function.
+    Result will have 2-nodes loops removed.
+    '''
     if shared.settings.loop_removal:
         def wrapped(*args, **kwargs):
             return remove_loops(function(*args, **kwargs))
