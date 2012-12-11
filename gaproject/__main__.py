@@ -4,14 +4,17 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
+
+
 import sys
+sys.path.append('../')
 import pprint
 import numpy
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot
-from gaproject.bench import bench, alias
+from gaproject.bench import bench
 
 from gaproject.functions.evaluators import Evaluators
 from gaproject.functions.mutators import mutShuffleIndexes, \

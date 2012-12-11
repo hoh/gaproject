@@ -1,6 +1,64 @@
 
 from deap import creator
 import random
+import shared
+
+
+
+
+def cxSCX(individual1, individual2):
+    """
+    Function that creates an instance of CXSCXCalculator and performs the crossover
+
+    """
+    return CXSCXCalculator(individual1, individual2, distanceMap).crossover()
+
+class CXSCXCalculator:
+    """
+    Contains the logic to perform sequential constructive crossover
+    see: http://www.cscjournals.org/csc/manuscript/Journals/IJBB/volume3/Issue6/IJBB-41.pdf
+
+    """
+    def __init__(self, individual1, individual2):
+        self.individual2 = individual2
+        self.individual1 = individual1
+        self.visitedNodes = []
+        self.sequent
+
+    def crossover(self):
+        child = creator.Individual()
+        #start at one
+        currentNodePosIn1 = self.individual1.index(1)
+        currentNodePosIn2 = self.individual2.index(1)
+        self.visitedNodes.append(1)
+
+        while(True):
+            candidateLegitNodeIn1 = self.individual1[(currentNodePosIn1 + 1) % len(individual1)]
+            candidateLegitNodeIn2 = self.individual2[(currentNodePosIn2 + 1) % len(individual2)]
+            #check if the candidate node in individual 1 has not been visited
+            if candidateLegitNodeIn1 not in self.visitedNodes:
+                legitNodeIn1 = candidateLegitNodeIn1
+            else:
+                legitNodeIn1 = None
+            #check if the candidate node in individual 2 has not been visited                
+            if candidateLegitNodeIn2 not in self.visitedNodes:
+                legitNodeIn2 = candidateLegitNodeIn2
+            else:
+                legitNodeIn2 = None
+            #if both individuals contain legit nodes, chose the one forming the edge
+            #with lowest cost
+            if(legitNodeIn1 and legitNodeIn2):
+                if shared.distanceMap[currentNodePosIn1][candidateLegitNodeIn1] > shared.distanceMap[currentNodePosIn2][candidateLegitNodeIn2]:
+                    child.append(self.individual2[currentNodePosIn2])
+                else
+                    child.append(self.individual1[currentNodePosIn1])
+            else:
+                child.append(_getSequentialNode())
+
+        return child
+
+    def _geteSequentialNode(self):
+        return 1
 
 
 def cxERX(individual1, individual2):

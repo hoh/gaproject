@@ -8,10 +8,10 @@ from gaproject.functions.mutators import mutShuffleIndexes, \
                                          simpleInversionMutation
 from functions.mutators import insertionMutation
 
-alias = {
-    'dist': Evaluators(distance_map).evalTSP,
-    'mut1': (mutShuffleIndexes, {'indpb': 0.05}),
-}
+# alias = {
+#     'dist': Evaluators(distance_map).evalTSP,
+#     'mut1': (mutShuffleIndexes, {'indpb': 0.05}),
+# }
 
 # operators = {'evaluate': Evaluators(distance_map).evalTSP,
 
