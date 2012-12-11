@@ -33,8 +33,8 @@ class CXSCXCalculator:
         self.visitedNodes.append(1)
 
         while(True):
-            candidateLegitNodeIn1 = self.individual1[(currentNodePosIn1 + 1) % len(individual1)]
-            candidateLegitNodeIn2 = self.individual2[(currentNodePosIn2 + 1) % len(individual2)]
+            candidateLegitNodeIn1 = self.individual1[(currentNodePosIn1 + 1) % len(self.individual1)]
+            candidateLegitNodeIn2 = self.individual2[(currentNodePosIn2 + 1) % len(self.individual2)]
             #check if the candidate node in individual 1 has not been visited
             if candidateLegitNodeIn1 not in self.visitedNodes:
                 legitNodeIn1 = candidateLegitNodeIn1
@@ -50,14 +50,14 @@ class CXSCXCalculator:
             if(legitNodeIn1 and legitNodeIn2):
                 if shared.distanceMap[currentNodePosIn1][candidateLegitNodeIn1] > shared.distanceMap[currentNodePosIn2][candidateLegitNodeIn2]:
                     child.append(self.individual2[currentNodePosIn2])
-                else
+                else:
                     child.append(self.individual1[currentNodePosIn1])
             else:
-                child.append(_getSequentialNode())
+                child.append(self._getSequentialNode())
 
         return child
 
-    def _geteSequentialNode(self):
+    def _getSequentialNode(self):
         return 1
 
 
