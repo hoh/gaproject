@@ -81,7 +81,7 @@ class MyDeap(object):
         return stats
 
     def run(self, toolbox, generations, population):
-        #random.seed(169)
+        random.seed(169)
 
         pop = toolbox.population(n=population)
 
