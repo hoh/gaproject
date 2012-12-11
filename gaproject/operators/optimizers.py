@@ -9,15 +9,30 @@ def dist(node1, node2):
     return shared.distance_map[node1][node2]
 
 
-def remove_loops(individual):
+def loop_removal(function):
+    if shared.settings.loop_removal:
+        def wrapped(*args, **kwargs):
+            return remove_loops(function(*args, **kwargs))
+        return wrapped
+    else:
+        return function
 
-    for i in xrange(1, len(individual) - 2):
-        d1 = dist(individual[i - 1], individual[i]) \
-           + dist(individual[i + 1], individual[i + 2])
-        d2 = dist(individual[i - 1], individual[i + 1]) \
-           + dist(individual[i], individual[i + 2])
+
+def remove_loops(individual):
+    length = len(individual)
+
+    for i in xrange(len(individual)):
+
+        before = (i - 1) % length
+        next = (i + 1) % length
+        after = (i + 2) % length
+
+        d1 = dist(individual[before], individual[i]) \
+           + dist(individual[next], individual[after])
+        d2 = dist(individual[before], individual[next]) \
+           + dist(individual[i], individual[after])
 
         if d2 < d1:
-            individual[i], individual[i + 1] = individual[i + 1], individual[i]
+            individual[i], individual[next] = individual[next], individual[i]
 
     return individual
