@@ -9,6 +9,17 @@ import random
 from deap import tools
 mutShuffleIndexes = tools.mutShuffleIndexes
 
+from gaproject.shared import settings as settings
+from gaproject.operators.optimizers import remove_loops
+
+
+def loop_removal(individual):
+    'Loop removal if the settings enable it.'
+    if settings.loop_removal:
+        individual = remove_loops(individual)
+    else:
+        return individual
+
 
 def insertionMutation(individual, indpb):
     '''
@@ -19,7 +30,8 @@ def insertionMutation(individual, indpb):
         insertionPoint = random.randint(0, len(individual) - 1)
         removedValue = individual.pop(indexRandomNode)
         individual.insert(insertionPoint, removedValue)
-    return individual
+
+    return loop_removal(individual)
 
 
 def inversionMutation(individual, indpb):
