@@ -22,6 +22,11 @@ def loop_removal(function):
 
 
 def remove_loops(individual):
+    '''Removing 2-nodes loops from the individual by comparing
+    the distance between a node and it's predecessor to the
+    distance from the next node to it's follower and switching
+    them if leads to an improvement.
+    '''
     length = len(individual)
 
     for i in xrange(len(individual)):
