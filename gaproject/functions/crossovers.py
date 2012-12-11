@@ -2,16 +2,23 @@
 from deap import creator
 import random
 
-'''
-Here should come the crossover functions.
-'''
-
 
 def cxERX(individual1, individual2):
+    """
+    Function that creates an instance of CXERXCalculator and performs the crossover
+
+    """
     return CXERXCalculator(individual1, individual2).crossover()
 
 
 class CXERXCalculator:
+    """
+    Contains the logic to perform the ERX crossover. ERX crossover is based on:
+    1. creation of an edgeMap
+    2. creation of child based on to the child a random node at first,
+    then the less connected nodes
+
+    """
 
     def __init__(self, individual1, individual2):
         self.individual2 = individual2
@@ -19,10 +26,10 @@ class CXERXCalculator:
         self.edgeMap = {}
 
     def crossover(self):
-        self.buildEdgeMap()
-        return self.createChild()
+        self._buildEdgeMap()
+        return self._createChild()
 
-    def createChild(self):
+    def _createChild(self):
         child = creator.Individual()
         #step1
         currentNode = self.individual1[random.randint(0, len(self.individual1) - 1)]
@@ -32,7 +39,7 @@ class CXERXCalculator:
             neighborgs = self.edgeMap.pop(currentNode)
             neighborgs = list(neighborgs)
             #remove references to the current node
-            self.cleanupNodeFromEdgeMap(currentNode)
+            self._cleanupNodeFromEdgeMap(currentNode)
             if neighborgs != []:
                 #find which neighborg node has the less edges
                 currentNeighborg = neighborgs[0]
@@ -51,8 +58,12 @@ class CXERXCalculator:
                     currentNode = self.edgeMap.keys()[random.randint(0, len(self.edgeMap.keys()) - 1)]
         return child
 
-    def buildEdgeMap(self):
-         #build the edgemap
+    def _buildEdgeMap(self):
+        """
+        For each node looks at the corresponding edges in each individual and creates
+        an edgeMap entry with as a set of neighboring nodes
+
+        """
         for node in self.individual1:
             pos1 = self.individual1.index(node)
             pos2 = self.individual2.index(node)
@@ -62,7 +73,11 @@ class CXERXCalculator:
             neighborg4 = self.individual2[(pos2 + 1) % len(self.individual2)]
             self.edgeMap[node] = set([neighborg1, neighborg2, neighborg3, neighborg4])
 
-    def cleanupNodeFromEdgeMap(self, referenceNode):
+    def _cleanupNodeFromEdgeMap(self, referenceNode):
+        """
+        Removes any reference to the given node and removes nodes that as a result have no more edges.
+
+        """
         edgeMapEntriesToBeRemoved = []
         for node in self.edgeMap:
             if referenceNode in self.edgeMap[node]:
