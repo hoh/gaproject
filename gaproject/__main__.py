@@ -4,12 +4,14 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
+import sys
 import random
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot, analyse
 from gaproject.store import Store
+from gaproject.tools.results import Results
 import gaproject.shared as shared
 settings = shared.settings
 
@@ -92,7 +94,11 @@ def main():
         analyse(results)
 
 if __name__ == '__main__':
-    try:
-        hof = main()
-    except KeyboardInterrupt:
-        print 'Execution stopped.'
+    if 'print' in sys.argv:
+        results = Results()
+        results.print_()
+    else:
+        try:
+            hof = main()
+        except KeyboardInterrupt:
+            print 'Execution stopped.'
