@@ -55,7 +55,7 @@ def inversionMutation(individual, indpb):
 @loop_removal
 def simpleInversionMutation(individual, indpb):
     '''
-    Chosing a Subtour then reversing it at a different part of the individual.
+    Reversing a Subtour.
     '''
     if(random.random() > indpb):
         begSubtour = random.randint(0, len(individual) - 1)

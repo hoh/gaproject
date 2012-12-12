@@ -17,6 +17,8 @@ def get():
         'set1': {
             'evaluate': 'eval_simple',
             'mutate': ('mutshuf', {'indpb': 0.05}),
+            'population': 10,
+            'generations': 10,
             },
 
         'set2': {
@@ -34,4 +36,7 @@ def evaluate(set):
         'evaluate': alias[set['evaluate']],
         'mutate': (alias[mut_func], mut_args),
         }
+    for key in ('population', 'generations'):
+        if key in set:
+            result[key] = set[key]
     return result

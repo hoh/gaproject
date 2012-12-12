@@ -26,12 +26,16 @@ def run(data, operators):
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
 
-    for repetition in xrange(shared.settings.repetitions):
+    population = operators.get('population', shared.settings.population)
+    generations = operators.get('generations', shared.settings.generations)
+    repetitions = operators.get('repetitions', shared.settings.repetitions)
+
+    for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
         pop, stats, hof = mydeap.run(toolbox,
-                                     shared.settings.generations,
-                                     shared.settings.population)
+                                     generations,
+                                     population)
 
         print 'Best so far:', operators['evaluate'](hof[0])
 

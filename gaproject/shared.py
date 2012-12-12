@@ -12,6 +12,6 @@ class Settings(object):
         self.generations = 200
         self.population = 100
         self.loop_removal = True
-        self.repetitions = 10
+        self.repetitions = 1
 
 settings = Settings()
