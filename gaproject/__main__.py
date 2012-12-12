@@ -9,6 +9,7 @@ import random
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot, analyse
+from gaproject.store import Store
 import gaproject.shared as shared
 settings = shared.settings
 
@@ -21,7 +22,7 @@ def run(data, operators):
 
     result = {'fitness': [],
               'best': [],
-              'operators': operators}
+              }
 
     # Running the DEAP:
     mydeap = MyDeap()
@@ -48,7 +49,7 @@ def run(data, operators):
         fitness = operators['evaluate'](hof[0])
 
         result['fitness'].append(fitness[0])
-        result['best'].append(hof[0])
+        result['best'].append(list(hof[0]))
 
     return result
 
@@ -63,20 +64,32 @@ def main():
     if shared.settings.plot:
         data.plot()
 
-    results = {}
+    # Initializing results gatherer:
+    if settings.use_db:
+        store = Store()
+    else:
+        results = {}
 
     sets = gaproject.sets.get()
     for b in sets:
         set_b = sets[b]
 
         operators = gaproject.sets.evaluate(set_b)
-        results[b] = run(data, operators)
+        result = run(data, operators)
+        result['set'] = set_b
+
+        # Puting results in chose output:
+        if settings.use_db:
+            store.runs.insert(result)
+        else:
+            results[b] = result
 
         # 'average': numpy.average(scores),
         # 'std': numpy.std(scores),
 
     # Pretty printing the resulting scores:
-    analyse(results)
+    if not settings.use_db:
+        analyse(results)
 
 if __name__ == '__main__':
     try:

@@ -13,6 +13,7 @@ class Settings(object):
         self.population = 101
         self.loop_removal = True
         self.repetitions = 1
+        self.use_db = True
 
     def __getitem__(self, name):
         return self.__getattribute__(name)
