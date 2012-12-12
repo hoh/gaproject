@@ -23,3 +23,6 @@ class Settings(object):
         return dico.get(key, settings[key])
 
 settings = Settings()
+
+# The following will be replaced by the real value in __main__.py:
+distance_map = None
