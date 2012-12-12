@@ -9,9 +9,16 @@ class Settings(object):
 
     def __init__(self):
         self.plot = 'plot' in sys.argv
-        self.generations = 200
-        self.population = 100
+        self.generations = 101
+        self.population = 101
         self.loop_removal = True
         self.repetitions = 1
+
+    def __getitem__(self, name):
+        return self.__getattribute__(name)
+
+    def fallback(self, dico, key):
+        'Returns dico[key] or fallbacks to self.key.'
+        return dico.get(key, settings[key])
 
 settings = Settings()

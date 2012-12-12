@@ -10,6 +10,7 @@ from gaproject.data import Box
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot, analyse
 import gaproject.shared as shared
+settings = shared.settings
 
 import gaproject.sets
 
@@ -26,9 +27,9 @@ def run(data, operators):
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
 
-    population = operators.get('population', shared.settings.population)
-    generations = operators.get('generations', shared.settings.generations)
-    repetitions = operators.get('repetitions', shared.settings.repetitions)
+    population = settings.fallback(operators, 'population')
+    generations = settings.fallback(operators, 'generations')
+    repetitions = settings.fallback(operators, 'repetitions')
 
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)

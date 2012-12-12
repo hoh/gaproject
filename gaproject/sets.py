@@ -14,17 +14,33 @@ from gaproject.operators import alias
 
 def get():
     return {
-        'set1': {
+        'set1a': {
             'evaluate': 'eval_simple',
             'mutate': ('mutshuf', {'indpb': 0.05}),
             'population': 10,
-            'generations': 10,
+            'generations': 10000,
             },
 
-        'set2': {
+        'set1b': {
             'evaluate': 'eval_simple',
-            'mutate': ('invert_mut', {'indpb': 0.05}),
-        }
+            'mutate': ('mutshuf', {'indpb': 0.05}),
+            'population': 100,
+            'generations': 1000,
+            },
+
+        'set1c': {
+            'evaluate': 'eval_simple',
+            'mutate': ('mutshuf', {'indpb': 0.05}),
+            'population': 1000,
+            'generations': 100,
+            },
+
+        # 'set2': {
+        #     'evaluate': 'eval_simple',
+        #     'mutate': ('invert_mut', {'indpb': 0.05}),
+        #     'population': 100,
+        #     'generations': 100,
+        # }
     }
 
 

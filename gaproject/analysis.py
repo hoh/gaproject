@@ -1,8 +1,9 @@
 
 "Module to analyze the result we've got. Eg: plot it."
 
-# import pprint
+import pprint
 import gaproject.shared as shared
+settings = shared.settings
 
 
 def plot(individual, data):
@@ -23,13 +24,13 @@ def analyse(results):
 
     for run in results:
         values = results[run]
+        operators = values['operators']
         print
         print 'Run:', run
         print 'Fitness average:', numpy.average(values['fitness'])
         print 'Fitness std:', numpy.std(values['fitness'])
-        print 'Generations:', values.get('generations', shared.settings.generations)
-        print 'Population:', values.get('population', shared.settings.population)
+        print 'Generations:', settings.fallback(operators, 'generations')
+        print 'Population:', settings.fallback(operators, 'population')
         print 'n =', len(values['fitness'])
-
-    print
-    # pprint.pprint(results)
+        print
+        # pprint.pprint(values)
