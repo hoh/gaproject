@@ -60,6 +60,7 @@ def main():
     box = Box('data/TSPBenchmark')
     data = box.get('xqf131.tsp')  # or belgiumtour.tsp
     shared.distance_map = data.dist_matrix()
+    shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.distance_map)
 
     if shared.settings.plot:
         data.plot()

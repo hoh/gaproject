@@ -14,3 +14,36 @@ def evalTSP(individual):
     for gene1, gene2 in zip(individual[0:-1], individual[1:]):
         distance += distance_map[gene1][gene2]
     return distance,
+
+
+def evalTSPAdjacentEdges(individual):
+    'The most basic evaluation, from the DEAP TSP example:'
+    distance_map = gaproject.shared.distance_map
+    #transform to path representation temporarily in order to evaluate the fitness
+    individual = fromAdjacentToPath(individual)
+    distance = distance_map[individual[-1]][individual[0]]
+    for gene1, gene2 in zip(individual[0:-1], individual[1:]):
+        distance += distance_map[gene1][gene2]
+    return distance,
+
+
+def fromAdjacentToPath(individual):
+    newIndividual = []
+    #always start the representation of the tour with node 0
+    currentNode = 0
+    newIndividual.append(0)
+    while(len(newIndividual) != len(individual)):
+        #for each position in individual take the corresponding node
+        newIndividual.append(individual[currentNode])
+        currentNode = individual[currentNode]
+    return newIndividual
+
+
+def fromPathToAdjacent(individual):
+    newIndividual = [0] * len(individual)
+    #for each node look at the adjacent node in the path representation
+    for x in range(len(individual) - 1):
+        #visit the path representation saving the adjacent node in the new individuak
+        newIndividual[individual[x]] = individual[(x + 1) % len(individual)]
+    return newIndividual
+
