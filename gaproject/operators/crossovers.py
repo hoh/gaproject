@@ -6,7 +6,7 @@ import gaproject.shared as shared
 # Importing the ordered crossover from DEAP
 from deap import tools
 cxOrdered = tools.cxOrdered
-cxPMX = tools.cxPartialyMatched,
+cxPMX = tools.cxPartialyMatched
 
 def cxHeuristic(individual1,individual2):
     """
@@ -20,7 +20,7 @@ def cxHeuristic(individual1,individual2):
     availableNodes = range(len(individual1))
     visitedNodes = []
     #chose a node at random to start with
-    currentNode = random.randint(0, len(individual1) - 1)
+    currentNode =  random.randint(0, len(individual1) - 1)
     availableNodes.pop(currentNode)
     visitedNodes.append(currentNode)
     while(len(child) != len(individual1)):
@@ -105,8 +105,10 @@ class CXSCXCalculator:
 
         """
         child = creator.Individual()
+
         #chose currentNodes randomly
         currentNode = self.individual1[random.randint(0, len(self.individual1) - 1)]
+        child.append(currentNode)
         self.visitedNodes.append(currentNode)
         while(True):
             currentNodePosIn1 = self.individual1.index(currentNode)
@@ -144,18 +146,18 @@ class CXSCXCalculator:
                 self.visitedNodes.append(sequentialNode)
                 currentNode = sequentialNode
                 if len(child) == len(self.individual1):
-                        break
+                    break
 
         return child
 
     def _getSequentialNode(self, currentNode):
         """
-        get next non-visited node from the predefined sequenceOfNodes
+        get next non-visited node from the predefined sequenceOfNode
         """
         for node in self.sequenceOfNodes:
-            if node not in self.visitedNodes and node != currentNode:
-                self.visitedNodes.append(node)
+            if (node not in self.visitedNodes) and (node != currentNode):
                 return node
+        return ValueError
 
 
 def cxERX(individual1, individual2):
@@ -195,14 +197,28 @@ class CXERXCalculator:
             neighborgs = list(neighborgs)
             #remove references to the current node
             self._cleanupNodeFromEdgeMap(currentNode)
+            #then compute the next node if there are any
             if neighborgs != []:
                 #find which neighborg node has the less edges
                 currentNeighborg = neighborgs[0]
                 currentLen = len(self.edgeMap[currentNeighborg])
-                for neighborg in neighborgs:
+                for neighborg in neighborgs[1:]:
                     if len(self.edgeMap[neighborg]) < currentLen:
+                        #if this neighborg has less edges then keep him
                         currentLen = len(self.edgeMap[neighborg])
                         currentNeighborg = neighborg
+                    elif len(self.edgeMap[neighborg]) == currentLen:
+                        #if the neighborg has the same amout of edges
+                        #break tie at random
+                        if random.randint(0, 1) > 0.5:
+                            #we keep the one we have
+                            pass
+                        else:
+                            currentLen = len(self.edgeMap[neighborg])
+                            currentNeighborg = neighborg
+                    else:
+                        #we keep the one we have
+                        pass
                 #the neighborg with the less edges is the next node in the child
                 currentNode = currentNeighborg
             else:
@@ -247,5 +263,6 @@ __all__ = (cxERX,
            cxHeuristic,
            cxSimpleSCX,
            cxEnhancedSCX,
-           cxOrdered
+           cxOrdered,
+           cxPMX
            )
