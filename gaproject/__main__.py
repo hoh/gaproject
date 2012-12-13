@@ -104,7 +104,12 @@ if __name__ == '__main__':
         results.print_()
         results.plot()
     else:
-        try:
-            hof = main()
-        except KeyboardInterrupt:
-            print 'Execution stopped.'
+        if 'flush' in sys.argv:
+            # Adding 'flush' parameter deletes all results from the database.
+            s = gaproject.store.Store()
+            s.runs.remove({})
+        if 'run' in sys.argv:
+            try:
+                hof = main()
+            except KeyboardInterrupt:
+                print 'Execution stopped.'

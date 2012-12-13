@@ -17,13 +17,15 @@ class Results(object):
         '''
 
         table = PrettyTable([
-            'name', 'fitness', 'population', 'generations'
+            'name', 'n', 'fit avg', 'fit std', 'pop', 'gen'
             ])
 
         for run in self.s.runs.find():
             table.add_row([
                 run['set']['name'],
-                run['fitness'],
+                len(run['fitness']),
+                average(run['fitness']),
+                std(run['fitness']),
                 run['set']['population'],
                 run['set']['generations'],
                 ])
