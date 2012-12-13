@@ -17,14 +17,8 @@ def evalTSP(individual):
 
 
 def evalTSPAdjacentEdges(individual):
-    'The most basic evaluation, from the DEAP TSP example:'
-    distance_map = gaproject.shared.distance_map
-    #transform to path representation temporarily in order to evaluate the fitness
-    individual = fromAdjacentToPath(individual)
-    distance = distance_map[individual[-1]][individual[0]]
-    for gene1, gene2 in zip(individual[0:-1], individual[1:]):
-        distance += distance_map[gene1][gene2]
-    return distance,
+    #transform to path representation and evaluate the resulting individual
+    return evalTSP(fromAdjacentToPath(individual)),
 
 
 def fromAdjacentToPath(individual):

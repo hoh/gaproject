@@ -3,8 +3,11 @@ from deap import creator
 import random
 import gaproject.shared as shared
 
+# Importing the ordered crossover from DEAP
+from deap import tools
+cxOrdered = tools.cxOrdered
 
-def heuristicCrossover(individual1,individual2):
+def cxHeuristic(individual1,individual2):
     """
     This crossover expects individuals according to adjacent representation.
     It tries to save edges that have lower cost.
@@ -96,6 +99,10 @@ class CXSCXCalculator:
         self.sequenceOfNodes = sequenceOfNodes
 
     def crossover(self):
+        """
+        Computes the SCX crossover.
+
+        """
         child = creator.Individual()
         #chose currentNodes randomly
         currentNode = self.individual1[random.randint(0, len(self.individual1) - 1)]
@@ -141,6 +148,9 @@ class CXSCXCalculator:
         return child
 
     def _getSequentialNode(self, currentNode):
+        """
+        get next non-visited node from the predefined sequenceOfNodes
+        """
         for node in self.sequenceOfNodes:
             if node not in self.visitedNodes and node != currentNode:
                 self.visitedNodes.append(node)
@@ -230,3 +240,11 @@ class CXERXCalculator:
                 edgeMapEntriesToBeRemoved.append(node)
         for node in edgeMapEntriesToBeRemoved:
                 edgeMapEntriesToBeRemoved.remove(node)
+
+
+__all__ = (cxERX,
+           cxHeuristic,
+           cxSimpleSCX,
+           cxEnhancedSCX,
+           cxOrdered
+           )

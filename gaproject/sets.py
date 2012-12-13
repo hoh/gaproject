@@ -17,6 +17,7 @@ def get():
         'set1a': {
             'name': 'set1a',
             'evaluate': 'eval_simple',
+            'mate': 'cxOX',
             'mutate': ('mutshuf', {'indpb': 0.05}),
             'population': 10,
             'generations': 1000,
