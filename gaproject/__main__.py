@@ -9,7 +9,7 @@ import random
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot, analyse
+from gaproject.analysis import plot, analyse, fitness_plot
 from gaproject.store import Store
 from gaproject.tools.results import Results
 import gaproject.shared as shared
@@ -24,6 +24,7 @@ def run(data, operators):
 
     result = {'fitness': [],
               'best': [],
+              'stats': [],
               }
 
     # Running the DEAP:
@@ -46,12 +47,14 @@ def run(data, operators):
         if shared.settings.plot:
             # Plotting the best result so far:
             plot(hof[0], data)
+            fitness_plot(stats)
 
         # Returning results as a dictionary:
         fitness = operators['evaluate'](hof[0])
 
         result['fitness'].append(fitness[0])
         result['best'].append(list(hof[0]))
+        result['stats'].append(stats)
 
     return result
 
