@@ -31,6 +31,7 @@ def run(data, operators):
     mydeap = MyDeap()
     toolbox = mydeap.toolbox(len(data), operators)
 
+    # Getting main parameters from operators of default from settings:
     population = settings.fallback(operators, 'population')
     generations = settings.fallback(operators, 'generations')
     repetitions = settings.fallback(operators, 'repetitions')
@@ -54,7 +55,7 @@ def run(data, operators):
 
         result['fitness'].append(fitness[0])
         result['best'].append(list(hof[0]))
-        result['stats'].append(stats)
+        result['stats'].append(stats.data)
 
     return result
 

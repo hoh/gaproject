@@ -1,6 +1,8 @@
 
 "Module to analyze the result we've got. Eg: plot it."
 
+import matplotlib.pyplot as plt
+
 import gaproject.shared as shared
 settings = shared.settings
 
@@ -13,17 +15,24 @@ def plot(individual, data):
     x_axis = [pos[0] for pos in positions]
     y_axis = [pos[1] for pos in positions]
 
-    import matplotlib.pyplot as plt
     plt.plot(x_axis, y_axis, 'ro-')
     plt.show()
 
 
 def fitness_plot(stats):
-    import matplotlib.pyplot as plt
+    '''Plots the stats object : fitness over generations.
+    If a filename is given, will output the result in that file,
+    else displays it on screen.
+    '''
+    def adjust(stats_list):
+        'Transforms the list found in stats to a plottable list.'
+        return [fit[0] for fit in stats_list[0]]
 
-    data_min = [fit[0] for fit in stats.data['min'][0]]
-    # import pdb; pdb.set_trace()
-    plt.plot(data_min)
+    plt.plot(adjust(stats.data['min']), 'b-')
+    plt.plot(adjust(stats.data['max']), 'r-')
+    plt.plot(adjust(stats.data['avg']), 'g-')
+    plt.plot(adjust(stats.data['std']), 'y-')
+
     plt.show()
 
 
