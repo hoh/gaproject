@@ -6,6 +6,7 @@ import gaproject.shared as shared
 # Importing the ordered crossover from DEAP
 from deap import tools
 cxOrdered = tools.cxOrdered
+cxPMX = tools.cxPartialyMatched,
 
 def cxHeuristic(individual1,individual2):
     """
@@ -121,8 +122,8 @@ class CXSCXCalculator:
             if candidateLegitNodeIn2 not in self.visitedNodes:
                 legitNodeIn2 = candidateLegitNodeIn2
             else:
-                legitNodeIn2 = None
             #if both individuals contain legit nodes, chose the one forming the edge
+                legitNodeIn2 = None
             #with lowest cost
             if(legitNodeIn1 and legitNodeIn2):
                 if shared.distance_map[currentNode][legitNodeIn1] > shared.distance_map[currentNode][legitNodeIn2]:

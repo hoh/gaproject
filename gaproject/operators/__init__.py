@@ -6,7 +6,7 @@ This (sub-)library contains the operators used for this TSP problem.
 # import gaproject.operators.evaluators as evaluators
 import mutators as mutators
 import evaluators as evaluators
-import crossover as crossover
+import crossovers as crossovers
 
 # The aliases contain the nicknames used to refer to the operators
 # in the analysis.
@@ -17,9 +17,10 @@ alias = {
     'insert_mut': mutators.insertionMutation,
     'invert_mut': mutators.inversionMutation,
     'simple_inv': mutators.simpleInversionMutation,
-    'cxOX': crossover.cxOrdered,
-    'cxHeuristic': crossover.cxHeuristic,
-    'cxSCX': crossover.cxSimpleSCX,
-    'cxESCX': crossover.cxEnhancedSCX,
-    'cxERX': crossover.cxERX
+    'cxOX': crossovers.cxOrdered,
+    'cxHeuristic': crossovers.cxHeuristic,
+    'cxSCX': crossovers.cxSimpleSCX,
+    'cxESCX': crossovers.cxEnhancedSCX,
+    'cxERX': crossovers.cxERX,
+    'cxPMX': crossovers.cxPMX
     }

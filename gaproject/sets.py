@@ -19,25 +19,25 @@ def get():
             'evaluate': 'eval_simple',
             'mate': 'cxOX',
             'mutate': ('mutshuf', {'indpb': 0.05}),
-            'population': 10,
-            'generations': 1000,
-            },
-
-        'set1b': {
-            'name': 'set1b',
-            'evaluate': 'eval_simple',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
             'population': 100,
-            'generations': 100,
+            'generations': 200,
             },
 
-        'set1c': {
-            'name': 'set1c',
-            'evaluate': 'eval_simple',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
-            'population': 1000,
-            'generations': 10,
-            },
+        # 'set1b': {
+        #     'name': 'set1b',
+        #     'evaluate': 'eval_simple',
+        #     'mutate': ('mutshuf', {'indpb': 0.05}),
+        #     'population': 100,
+        #     'generations': 100,
+        #     },
+
+        # 'set1c': {
+        #     'name': 'set1c',
+        #     'evaluate': 'eval_simple',
+        #     'mutate': ('mutshuf', {'indpb': 0.05}),
+        #     'population': 1000,
+        #     'generations': 10,
+        #     },
 
         # 'set2': {
         #     'evaluate': 'eval_simple',
@@ -51,10 +51,12 @@ def get():
 def evaluate(set):
 
     mut_func, mut_args = set['mutate']
+    crossover_func = set['mate']
 
     result = {
         'evaluate': alias[set['evaluate']],
         'mutate': (alias[mut_func], mut_args),
+        'mate': (alias[crossover_func]),
         }
     for key in ('population', 'generations'):
         if key in set:
