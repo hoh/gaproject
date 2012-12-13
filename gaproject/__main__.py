@@ -9,13 +9,14 @@ import random
 
 from gaproject.data import Box
 from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot, analyse, fitness_plot
+from gaproject.analysis import plot, analyze, fitness_plot
 from gaproject.store import Store
 from gaproject.tools.results import Results
+import gaproject.sets
+
+# Loading settings:
 import gaproject.shared as shared
 settings = shared.settings
-
-import gaproject.sets
 
 
 def run(data, operators):
@@ -95,12 +96,13 @@ def main():
 
     # Pretty printing the resulting scores:
     if not settings.use_db:
-        analyse(results)
+        analyze(results)
 
 if __name__ == '__main__':
-    if 'print' in sys.argv:
+    if 'results' in sys.argv:
         results = Results()
         results.print_()
+        results.plot()
     else:
         try:
             hof = main()

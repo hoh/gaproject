@@ -36,7 +36,7 @@ def fitness_plot(stats):
     plt.show()
 
 
-def analyse(results):
+def analyze(results):
     import numpy
 
     for run in results:
@@ -50,4 +50,3 @@ def analyse(results):
         print 'Population:', settings.fallback(set_, 'population')
         print 'n =', len(values['fitness'])
         print
-        # pprint.pprint(values)
