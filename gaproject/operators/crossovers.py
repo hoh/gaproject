@@ -2,6 +2,7 @@
 from deap import creator
 import random
 import gaproject.shared as shared
+import numpy
 
 # Importing the ordered crossover from DEAP
 from deap import tools
@@ -154,6 +155,11 @@ class CXSCXCalculator:
         """
         get next non-visited node from the predefined sequenceOfNode
         """
+        a = random.randint(0,1)
+        if a < 1/3:
+            closest = shared.distance_map[currentNode][numpy.min(shared.distance_map[currentNode]).index()]    
+            if closest not in self.visited and closest != currentNode:
+                return closest
         for node in self.sequenceOfNodes:
             if (node not in self.visitedNodes) and (node != currentNode):
                 return node

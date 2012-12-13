@@ -17,10 +17,10 @@ def get():
         'set1a': {
             'name': 'set1a',
             'evaluate': 'eval_simple',
-            'mate': 'cxOX',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
+            'mate': 'cxESCX',
+            'mutate': ('invert_mut', {'indpb': 0.0}),
             'population': 100,
-            'generations': 200,
+            'generations': 1000,
             },
 
         # 'set1b': {
