@@ -24,11 +24,11 @@ def get():
         #     },
         'set1b': {
             'name': 'set1b',
-            'evaluate': 'eval_simple',
-            'mate': 'cxERX',
-            'mutate': ('invert_mut', {'indpb': 0.4}),
+            'evaluate': 'eval_adjacent',
+            'mate': 'cxHeuristic',
+            'mutate': ('invert_mut', {'indpb': 0.0}),
             'population': 100,
-            'generations': 2000,
+            'generations': 500,
             },
 
         # 'set1b': {

@@ -17,7 +17,7 @@ def insertionMutation(individual, indpb):
     '''
     Chosing an node randomly and inserting it at a random position.
     '''
-    if (random.random() > indpb):
+    if (random.random() < indpb):
         indexRandomNode = random.randint(0, len(individual) - 1)
         insertionPoint = random.randint(0, len(individual) - 1)
         removedValue = individual.pop(indexRandomNode)
@@ -31,7 +31,7 @@ def inversionMutation(individual, indpb):
     '''
     Chosing a Subtour then inserting it reversed at a different part of the individual.
     '''
-    if(random.random() > indpb):
+    if(random.random() < indpb):
         #compute the beginning and end of the Subtour.
         begSubtour = random.randint(0, len(individual) - 1)
         endSubtour = random.randint(begSubtour, len(individual) - 1)
@@ -57,7 +57,7 @@ def simpleInversionMutation(individual, indpb):
     '''
     Reversing a Subtour.
     '''
-    if(random.random() > indpb):
+    if(random.random() < indpb):
         begSubtour = random.randint(0, len(individual) - 1)
         endSubtour = random.randint(begSubtour, len(individual) - 1)
 
