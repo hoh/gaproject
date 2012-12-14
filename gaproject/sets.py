@@ -11,6 +11,14 @@ from gaproject.operators import alias
 #     'inserts values in db'
 #
 
+defaults = {
+    'evaluate': 'eval_simple',
+    'mutate': ('mutshuf', {'indpb': 0.05}),
+    'mate': 'cxERX',
+    'population': 100,
+    'generations': 100,
+}
+
 
 def get():
     return {
@@ -18,7 +26,6 @@ def get():
             'name': 'set1a',
             'evaluate': 'eval_simple',
             'mutate': ('mutshuf', {'indpb': 0.05}),
-            'mate': 'cxERX',
             'population': 10,
             'generations': 1000,
             },
@@ -71,7 +78,7 @@ def get():
             'generations': 100,
             },
 
-        'set3b': {
+        'set4b': {
             'name': 'set1b',
             'evaluate': 'eval_simple',
             'mutate': ('simple_inv', {'indpb': 0.05}),
@@ -84,15 +91,23 @@ def get():
 
 def evaluate(set):
 
-    mut_func, mut_args = set['mutate']
-    crossover_func = set['mate']
+    # We will use the defaults, updated by the given set:
+    d = defaults.copy()
+    d.update(set)
+
+    # Extracting the two parts for mutate: function and arguments,
+    # the others being straightforward:
+    mut_func, mut_args = d['mutate']
 
     result = {
-        'evaluate': alias[set['evaluate']],
+        'evaluate': alias[d['evaluate']],
         'mutate': (alias[mut_func], mut_args),
-        'mate': (alias[crossover_func]),
+        'mate': (alias[d['mate']]),
         }
+
+    # Integer values, no need to go through alias:
     for key in ('population', 'generations'):
-        if key in set:
-            result[key] = set[key]
+        if key in d:
+            result[key] = d[key]
+
     return result
