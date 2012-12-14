@@ -17,7 +17,7 @@ class Results(object):
         '''
 
         table = PrettyTable([
-            'name', 'n', 'fit avg', 'fit std', 'pop', 'gen'
+            'name', 'n', 'fit avg', 'fit std', 'pop', 'gen', 'mutator', 'cx'
             ])
 
         for run in self.s.runs.find():
@@ -28,6 +28,8 @@ class Results(object):
                 std(run['fitness']),
                 run['set']['population'],
                 run['set']['generations'],
+                run['set'].get('mutate', [''])[0],
+                run['set'].get('mate', ''),
                 ])
 
         print table
@@ -52,6 +54,9 @@ class Results(object):
                  for i in xrange(len(data))],
                 'r-')
 
+            plt.title(run['set']['name'])
+            plt.xlabel('Generations')
+            plt.ylabel('Min. fitness')
             plt.show()
 
 
