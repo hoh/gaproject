@@ -53,7 +53,6 @@ class Data(object):
         medians = numpy.median(distance_map, axis=1)
         defaultSequence = range(0, len(distance_map[0]))
         mediansAndNodes = zip(medians, defaultSequence)
-        mediansAndNodes.sort(reverse=True)
         sortedMedians, sequenceOfNodes = zip(*mediansAndNodes)
         return sequenceOfNodes
 

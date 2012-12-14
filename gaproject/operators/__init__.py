@@ -12,11 +12,13 @@ import crossovers as crossovers
 # in the analysis.
 alias = {
     'eval_simple': evaluators.evalTSP,
+    'eval_adjacent': evaluators.evalTSPAdjacentEdges,
 
     'mutshuf': mutators.mutShuffleIndexes,
     'insert_mut': mutators.insertionMutation,
     'invert_mut': mutators.inversionMutation,
     'simple_inv': mutators.simpleInversionMutation,
+    
     'cxOX': crossovers.cxOrdered,
     'cxHeuristic': crossovers.cxHeuristic,
     'cxSCX': crossovers.cxSimpleSCX,

@@ -14,13 +14,21 @@ from gaproject.operators import alias
 
 def get():
     return {
-        'set1a': {
-            'name': 'set1a',
+        # 'set1a': {
+        #     'name': 'set1a',
+        #     'evaluate': 'eval_simple',
+        #     'mate': 'cxERX',
+        #     'mutate': ('invert_mut', {'indpb': 0.0}),
+        #     'population': 10,
+        #     'generations': 200,
+        #     },
+        'set1b': {
+            'name': 'set1b',
             'evaluate': 'eval_simple',
-            'mate': 'cxESCX',
-            'mutate': ('invert_mut', {'indpb': 0.0}),
+            'mate': 'cxERX',
+            'mutate': ('invert_mut', {'indpb': 0.4}),
             'population': 100,
-            'generations': 1000,
+            'generations': 2000,
             },
 
         # 'set1b': {

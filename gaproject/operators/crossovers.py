@@ -9,7 +9,8 @@ from deap import tools
 cxOrdered = tools.cxOrdered
 cxPMX = tools.cxPartialyMatched
 
-def cxHeuristic(individual1,individual2):
+
+def cxHeuristic(individual1, individual2):
     """
     This crossover expects individuals according to adjacent representation.
     It tries to save edges that have lower cost.
@@ -18,6 +19,9 @@ def cxHeuristic(individual1,individual2):
     """
 
     child = creator.Individual()
+    #temporarily we fill in child using the values in individual1
+    #these values will be overwritten
+    child[:] = individual1[:]
     availableNodes = range(len(individual1))
     visitedNodes = []
     #chose a node at random to start with
@@ -65,16 +69,13 @@ def cxHeuristic(individual1,individual2):
     return child
 
 
-
-
-
 def cxEnhancedSCX(individual1, individual2):
     """
     Function that creates an instance of CXSCXCalculator and performs the simple SCX crossover
 
     """
-    #creating the sequence of nodes like this is inneficient BUT it should work for the time being.
-    return CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes).crossover()
+    localHillClimbing = True
+    return CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes, localHillClimbing).crossover()
 
 
 def cxSimpleSCX(individual1, individual2):
@@ -82,8 +83,9 @@ def cxSimpleSCX(individual1, individual2):
     Function that creates an instance of CXSCXCalculator and performs the simple SCX crossover
 
     """
+    localHillClimbing = False
     sequenceOfNodes = range(len(individual1))
-    return CXSCXCalculator(individual1, individual2, sequenceOfNodes).crossover()
+    return CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
 
 
 class CXSCXCalculator:
@@ -94,11 +96,12 @@ class CXSCXCalculator:
 
     """
 
-    def __init__(self, individual1, individual2, sequenceOfNodes):
+    def __init__(self, individual1, individual2, sequenceOfNodes, localHillClimbing):
         self.individual2 = individual2
         self.individual1 = individual1
         self.visitedNodes = []
         self.sequenceOfNodes = sequenceOfNodes
+        self.localHillClimbing = localHillClimbing
 
     def crossover(self):
         """
@@ -155,11 +158,16 @@ class CXSCXCalculator:
         """
         get next non-visited node from the predefined sequenceOfNode
         """
-        a = random.randint(0,1)
-        if a < 1/3:
-            closest = shared.distance_map[currentNode][numpy.min(shared.distance_map[currentNode]).index()]    
-            if closest not in self.visited and closest != currentNode:
-                return closest
+
+        #simple optimisation to try to select with a 1/3 probability the closest node
+        if self.localHillClimbing:
+            a = random.randint(0, 1)
+            if a < 1/3:
+                closest = shared.distance_map[currentNode][numpy.min(shared.distance_map[currentNode]).index()]  
+                if closest not in self.visited and closest != currentNode:
+                    return closest
+
+        #otherwise assing a node from the predefined sequence of nodes
         for node in self.sequenceOfNodes:
             if (node not in self.visitedNodes) and (node != currentNode):
                 return node
