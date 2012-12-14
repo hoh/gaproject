@@ -4,17 +4,78 @@ import random
 import gaproject.shared as shared
 import numpy
 
+# Importing the ordered crossover from DEAP
+from deap import tools
+cxOrdered = tools.cxOrdered
+cxPMX = tools.cxPartialyMatched
+
+
+def cxHeuristic(individual1, individual2):
+    """
+    This crossover expects individuals according to adjacent representation.
+    It tries to save edges that have lower cost.
+    In order to avoid loops, random edges are created (note that this is a sort of mutation)
+
+    """
+
+    child = creator.Individual()
+    #temporarily we fill in child using the values in individual1
+    #these values will be overwritten
+    child[:] = individual1[:]
+    availableNodes = range(len(individual1))
+    visitedNodes = []
+    #chose a node at random to start with
+    currentNode =  random.randint(0, len(individual1) - 1)
+    availableNodes.pop(currentNode)
+    visitedNodes.append(currentNode)
+    while(len(child) != len(individual1)):
+        #copmare which edge is shorter in each invidividual
+        edge_distance1 = shared.distance_map[currentNode][individual1[currentNode]]
+        edge_distance2 = shared.distance_map[currentNode][individual2[currentNode]]
+
+        if edge_distance1 > edge_distance2:
+            #if no loop is introduced proceed to save the edge in child
+            if individual2[currentNode] not in visitedNodes:
+                child[currentNode] = individual2[currentNode]
+                visitedNodes.append(individual2[currentNode])
+                availableNodes.pop(individual2[currentNode])
+                currentNode = individual2[currentNode]
+            else:
+                #if a loop would have been introduced try to generate a random edge
+                candidateNode = random.randint(0, len(individual1) - 1)
+                while(candidateNode not in availableNodes):
+                    candidateNode = random.randint(0, len(individual1) - 1)
+                child[currentNode] = candidateNode
+                visitedNodes.append(candidateNode)
+                availableNodes.pop(candidateNode)
+                currentNode = candidateNode
+
+        else:
+             #if no loop is introduced proceed to save the edge in child
+            if individual1[currentNode] not in visitedNodes:
+                child[currentNode] = individual1[currentNode]
+                visitedNodes.append(individual1[currentNode])
+                availableNodes.pop(individual1[currentNode])
+                currentNode = individual1[currentNode]
+            else:
+                #if a loop would have been introdued try to generate a random edge
+                candidateNode = random.randint(0, len(individual1) - 1)
+                while(candidateNode not in availableNodes):
+                    candidateNode = random.randint(0, len(individual1) - 1)
+                child[currentNode] = candidateNode
+                visitedNodes.append(candidateNode)
+                availableNodes.pop(candidateNode)
+                currentNode = candidateNode
+    return child
+
 
 def cxEnhancedSCX(individual1, individual2):
     """
     Function that creates an instance of CXSCXCalculator and performs the simple SCX crossover
 
     """
-    medians = numpy.median(shared.distance_map, axis=1)
-    defaultSequence = range(1, len(individual1))
-    sequenceOfNodes = sorted(defaultSequence)
-    #creating the sequence of nodes like this is inneficient BUT it should work for the time being.
-    return CXSCXCalculator(individual1, individual2, sequenceOfNodes).crossover()
+    localHillClimbing = True
+    return CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes, localHillClimbing).crossover()
 
 
 def cxSimpleSCX(individual1, individual2):
@@ -22,8 +83,9 @@ def cxSimpleSCX(individual1, individual2):
     Function that creates an instance of CXSCXCalculator and performs the simple SCX crossover
 
     """
-    sequenceOfNodes = [x for x in range(2, len(individual1))]
-    return CXSCXCalculator(individual1, individual2, sequenceOfNodes).crossover()
+    localHillClimbing = False
+    sequenceOfNodes = range(len(individual1))
+    return CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
 
 
 class CXSCXCalculator:
@@ -34,17 +96,24 @@ class CXSCXCalculator:
 
     """
 
-    def __init__(self, individual1, individual2, sequenceOfNodes):
+    def __init__(self, individual1, individual2, sequenceOfNodes, localHillClimbing):
         self.individual2 = individual2
         self.individual1 = individual1
         self.visitedNodes = []
         self.sequenceOfNodes = sequenceOfNodes
+        self.localHillClimbing = localHillClimbing
 
     def crossover(self):
+        """
+        Computes the SCX crossover.
+
+        """
         child = creator.Individual()
-        #start with node number 1
-        currentNode = 1
-        self.visitedNodes.append(1)
+
+        #chose currentNodes randomly
+        currentNode = self.individual1[random.randint(0, len(self.individual1) - 1)]
+        child.append(currentNode)
+        self.visitedNodes.append(currentNode)
         while(True):
             currentNodePosIn1 = self.individual1.index(currentNode)
             currentNodePosIn2 = self.individual2.index(currentNode)
@@ -59,8 +128,8 @@ class CXSCXCalculator:
             if candidateLegitNodeIn2 not in self.visitedNodes:
                 legitNodeIn2 = candidateLegitNodeIn2
             else:
-                legitNodeIn2 = None
             #if both individuals contain legit nodes, chose the one forming the edge
+                legitNodeIn2 = None
             #with lowest cost
             if(legitNodeIn1 and legitNodeIn2):
                 if shared.distance_map[currentNode][legitNodeIn1] > shared.distance_map[currentNode][legitNodeIn2]:
@@ -76,20 +145,33 @@ class CXSCXCalculator:
                     if len(child) == len(self.individual1):
                         break
             else:
-                sequentialNode = self._getSequentialNode()
+                sequentialNode = self._getSequentialNode(currentNode)
                 child.append(sequentialNode)
                 self.visitedNodes.append(sequentialNode)
                 currentNode = sequentialNode
                 if len(child) == len(self.individual1):
-                        break
+                    break
 
         return child
 
-    def _getSequentialNode(self):
+    def _getSequentialNode(self, currentNode):
+        """
+        get next non-visited node from the predefined sequenceOfNode
+        """
+
+        #simple optimisation to try to select with a 1/3 probability the closest node
+        if self.localHillClimbing:
+            a = random.randint(0, 1)
+            if a < 1/3:
+                closest = shared.distance_map[currentNode][numpy.min(shared.distance_map[currentNode]).index()]  
+                if closest not in self.visited and closest != currentNode:
+                    return closest
+
+        #otherwise assing a node from the predefined sequence of nodes
         for node in self.sequenceOfNodes:
-            if node not in self.visitedNodes:
-                self.visitedNodes.append(node)
+            if (node not in self.visitedNodes) and (node != currentNode):
                 return node
+        return ValueError
 
 
 def cxERX(individual1, individual2):
@@ -129,14 +211,28 @@ class CXERXCalculator:
             neighborgs = list(neighborgs)
             #remove references to the current node
             self._cleanupNodeFromEdgeMap(currentNode)
+            #then compute the next node if there are any
             if neighborgs != []:
                 #find which neighborg node has the less edges
                 currentNeighborg = neighborgs[0]
                 currentLen = len(self.edgeMap[currentNeighborg])
-                for neighborg in neighborgs:
+                for neighborg in neighborgs[1:]:
                     if len(self.edgeMap[neighborg]) < currentLen:
+                        #if this neighborg has less edges then keep him
                         currentLen = len(self.edgeMap[neighborg])
                         currentNeighborg = neighborg
+                    elif len(self.edgeMap[neighborg]) == currentLen:
+                        #if the neighborg has the same amout of edges
+                        #break tie at random
+                        if random.randint(0, 1) > 0.5:
+                            #we keep the one we have
+                            pass
+                        else:
+                            currentLen = len(self.edgeMap[neighborg])
+                            currentNeighborg = neighborg
+                    else:
+                        #we keep the one we have
+                        pass
                 #the neighborg with the less edges is the next node in the child
                 currentNode = currentNeighborg
             else:
@@ -175,3 +271,12 @@ class CXERXCalculator:
                 edgeMapEntriesToBeRemoved.append(node)
         for node in edgeMapEntriesToBeRemoved:
                 edgeMapEntriesToBeRemoved.remove(node)
+
+
+__all__ = (cxERX,
+           cxHeuristic,
+           cxSimpleSCX,
+           cxEnhancedSCX,
+           cxOrdered,
+           cxPMX
+           )

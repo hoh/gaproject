@@ -1,6 +1,7 @@
 
 import os.path
 import math
+import numpy
 
 
 def dist(point1, point2):
@@ -47,6 +48,13 @@ class Data(object):
     def size(self):
         "Return the size of the current data."
         return len(self.positions)
+
+    def nodesOrderedByMedian(self, distance_map):
+        medians = numpy.median(distance_map, axis=1)
+        defaultSequence = range(0, len(distance_map[0]))
+        mediansAndNodes = zip(medians, defaultSequence)
+        sortedMedians, sequenceOfNodes = zip(*mediansAndNodes)
+        return sequenceOfNodes
 
     # ----- Special type functions: -----
     # Length:
