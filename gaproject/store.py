@@ -8,9 +8,15 @@ Uses PyMongo, see doc on:
 
 '''
 
+import sys
+from pymongo.errors import ConnectionFailure
 from pymongo import MongoClient
 
 
 def Store():
-    connection = MongoClient()
-    return connection['gaproject']
+    try:
+        connection = MongoClient()
+        return connection['gaproject']
+    except ConnectionFailure:
+        print 'Error: could not connect to DB'
+        sys.exit()

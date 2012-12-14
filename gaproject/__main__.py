@@ -100,6 +100,8 @@ def main():
         analyze(results)
 
 if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        print 'Possible actions :\n - run\n - results: display results\n - flush: clear the database '
     if 'results' in sys.argv:
         results = Results()
         results.print_()
