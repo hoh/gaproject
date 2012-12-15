@@ -25,4 +25,4 @@ def evalTSPAdjacentEdges(individual):
     evaluation = evalTSP(fromAdjacentToPath(individual))
     return evaluation
 
-__all__ = 'evalTSP', 'evalTSPAdjacentEdges'
+__all__ = evalTSP, evalTSPAdjacentEdges
