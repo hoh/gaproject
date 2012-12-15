@@ -1,6 +1,6 @@
 
 import array
-from gaproject.operators.evaluators import *
+from gaproject.tools.adjacent import checkIfValidAdjacent
 
 
 def test_validAdjToPath():

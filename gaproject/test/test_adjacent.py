@@ -8,7 +8,7 @@ box = Box('data/TSPBenchmark')
 shared.data = box.get('belgiumtour.tsp')
 
 import gaproject.operators.creators as creators
-from gaproject.operators.evaluators import fromPathToAdjacent, fromAdjacentToPath
+from gaproject.tools.adjacent import fromPathToAdjacent, fromAdjacentToPath
 
 
 def test_fromPathToAdjacent():
