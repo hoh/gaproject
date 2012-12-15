@@ -22,9 +22,6 @@ def evalTSPAdjacentEdges(individual):
     if not checkIfValidAdjacent(individual):
         raise ValueError("Individual is not valid according to adjacent representation.\n", individual)
     evaluation = evalTSP(fromAdjacentToPath(individual))
-    if evaluation == (0.0,):
-        print  individual
-        raw_input()
     return evaluation
 
 
@@ -32,11 +29,11 @@ def checkIfValidAdjacent(individual):
     visitedNodes = []
     #always start the representation of the tour with node 0
     currentNode = 0
-    for x in individual:
+    while(len(visitedNodes) != len(individual)):
         #if a currentNode has already been visited we have a non valid adjacent individual
         if currentNode in visitedNodes:
             return False
-        visitedNodes.append(individual[currentNode])
+        visitedNodes.append(currentNode)
         currentNode = individual[currentNode]
     return True
 
