@@ -10,6 +10,7 @@ import json
 import gaproject.run
 from gaproject.data import Box
 from gaproject.tools.results import Results
+from gaproject.tools.optimizer import Optimizer
 
 
 class Main(object):
@@ -91,6 +92,11 @@ class Main(object):
         for j in s.jobs.find():
             print j
         print 'showed queue'
+
+    def optimize(self):
+        'Launches parameter optimization.'
+        optimize = Optimizer()
+        optimize.go()
 
 if __name__ == '__main__':
     Main(sys.argv)

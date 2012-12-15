@@ -13,6 +13,7 @@ import creators
 # in the analysis.
 alias = {
     'path_creator': creators.path_creator,
+    'adj_creator': creators.adj_creator,
 
     'eval_simple': evaluators.evalTSP,
     'eval_adjacent': evaluators.evalTSPAdjacentEdges,

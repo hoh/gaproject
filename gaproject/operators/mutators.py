@@ -16,13 +16,12 @@ from gaproject.operators.evaluators import checkIfValidAdjacent
 
 
 def mutationFromAdjacentToPath(function):
-    def wrapped(individual,indpb):
-        if checkIfValidAdjacent(individual):
-            indi = fromAdjacentToPath(individual)
-        else:
-            indi = individual
+    def wrapped(individual, indpb):
+        if not checkIfValidAdjacent(individual):
+            raise ValueError('Invalid error.')
+        indi = fromAdjacentToPath(individual)
         result = function(indi, indpb)
-        return fromPathToAdjacent(result)
+        return fromPathToAdjacent(result[0])
     return wrapped
 
 mutShuffleIndexesAdj = mutationFromAdjacentToPath(mutShuffleIndexes)

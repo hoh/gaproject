@@ -23,8 +23,18 @@ defaults = {
 
 def get():
     'Returns a list or generator of jobs to be executed.'
-    s = Store()
-    return s.jobs.find()
+    # s = Store()
+    # return s.jobs.find()
+
+    return [{
+        'name': 'set1adj',
+        'evaluate': 'eval_adjacent',
+        'mutate': ('mutshuf_adj', {'indpb': 0.05}),
+        'population': 10,
+        'generations': 1000,
+        'indices': 'adj_creator',
+        'mate': 'cxHeuristic',
+        }]
 
     # return [{
     #     'name': 'set1a',
