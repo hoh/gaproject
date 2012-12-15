@@ -4,8 +4,7 @@ Here should come the fitness evaluation functions.
 '''
 
 import gaproject.shared
-from gaproject.tools.adjacent import checkIfValidAdjacent, fromAdjacentToPath, fromPathToAdjacent
-import array
+from gaproject.tools.adjacent import checkIfValidAdjacent, fromAdjacentToPath
 
 
 def evalTSP(individual):

@@ -10,9 +10,9 @@ from deap import tools
 mutShuffleIndexes = tools.mutShuffleIndexes
 
 from gaproject.operators.optimizers import loop_removal
-from gaproject.operators.evaluators import fromAdjacentToPath
-from gaproject.operators.evaluators import fromPathToAdjacent
-from gaproject.operators.evaluators import checkIfValidAdjacent
+from gaproject.tools.adjacent import fromAdjacentToPath
+from gaproject.tools.adjacent import fromPathToAdjacent
+from gaproject.tools.adjacent import checkIfValidAdjacent
 
 
 def mutationFromAdjacentToPath(function):
@@ -74,6 +74,7 @@ def inversionMutation(individual, indpb):
     return individual
 
 inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
+
 
 @loop_removal
 def simpleInversionMutation(individual, indpb):

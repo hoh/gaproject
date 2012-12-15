@@ -1,7 +1,7 @@
 
 import random
 import gaproject.shared as shared
-from gaproject.operators.evaluators import fromPathToAdjacent
+from gaproject.tools.adjacent import fromPathToAdjacent
 
 
 def path_creator():
