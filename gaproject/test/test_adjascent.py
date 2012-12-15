@@ -16,14 +16,12 @@ def test_fromPathToAdjacent():
     print path_individual
     adj_individual = fromPathToAdjacent(path_individual)
     print adj_individual
-    # assert False
 
 
 def test_fromAdjacentToPath():
     adj_individual = creators.adj_creator()
     path_individual = fromAdjacentToPath(adj_individual)
     print path_individual
-    # assert False
 
 
 def test_loopConversion():
