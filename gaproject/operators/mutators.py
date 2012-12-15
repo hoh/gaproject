@@ -22,10 +22,14 @@ def mutationFromAdjacentToPath(function):
         # print 'mut from:', individual
         if not checkIfValidAdjacent(individual):
             raise ValueError('Invalid error.')
+        # print 'individual', type(individual), individual
         indi = fromAdjacentToPath(individual)
+        # print 'indi', type(indi), indi
         result = function(indi, indpb)
+        # print 'result', type(result), result
         individual[:] = fromPathToAdjacent(result[0])
-
+        # print 'individual', type(individual), individual
+        # print '\n'*5
         return individual
     return wrapped
 
@@ -43,7 +47,7 @@ def insertionMutation(individual, indpb):
         removedValue = individual.pop(indexRandomNode)
         individual.insert(insertionPoint, removedValue)
 
-    return individual
+    return individual,
 
 insertionMutationAdj = mutationFromAdjacentToPath(insertionMutation)
 
@@ -71,7 +75,7 @@ def inversionMutation(individual, indpb):
         #create the new individual by inserting the Subtour at the insertion position
         individual[:] = individual[0:insertionPos] + Subtour + individual[insertionPos:]
 
-    return individual
+    return individual,
 
 inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
 
@@ -92,7 +96,7 @@ def simpleInversionMutation(individual, indpb):
         #create the new individual
         individual[:] = individual[0:begSubtour] + Subtour + individual[endSubtour:]
 
-    return individual
+    return individual,
 
 simpleInversionMutationAdj = mutationFromAdjacentToPath(simpleInversionMutation)
 
