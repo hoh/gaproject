@@ -68,12 +68,12 @@ def main(data):
     store = Store()
 
     sets = gaproject.sets.get()
-    for b in sets:
-        set_b = sets[b]
+    for set_ in sets:
+        print 'Running set:', set_
 
-        operators = gaproject.sets.evaluate(set_b)
+        operators = gaproject.sets.evaluate(set_)
         result = run(data, operators)
-        result['set'] = set_b
+        result['set'] = set_
 
         # Puting results in DB:
         store.runs.insert(result)

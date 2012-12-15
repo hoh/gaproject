@@ -4,8 +4,8 @@ run.
 '''
 
 from gaproject.operators import alias
+from gaproject.store import Store
 
-# from gaproject.store import Store
 # future:
 # def insert(...)
 #     'inserts values in db'
@@ -21,72 +21,8 @@ defaults = {
 
 
 def get():
-    return {
-        'set1a': {
-            'name': 'set1a',
-            'evaluate': 'eval_simple',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
-            'population': 10,
-            'generations': 1000,
-            },
-
-        'set1b': {
-            'name': 'set1b',
-            'evaluate': 'eval_simple',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
-            'population': 100,
-            'generations': 100,
-            },
-
-        'set1c': {
-            'name': 'set1c',
-            'evaluate': 'eval_simple',
-            'mutate': ('mutshuf', {'indpb': 0.05}),
-            'population': 1000,
-            'generations': 10,
-            },
-
-        # 'set1b-lm': {
-        #     'name': 'set1b',
-        #     'evaluate': 'eval_simple',
-        #     'mutate': ('mutshuf', {'indpb': 0.01}),
-        #     'population': 100,
-        #     'generations': 100,
-        #     },
-
-        # 'set1b-hm': {
-        #     'name': 'set1b',
-        #     'evaluate': 'eval_simple',
-        #     'mutate': ('mutshuf', {'indpb': 0.10}),
-        #     'population': 100,
-        #     'generations': 100,
-        #     },
-
-        # 'set2b': {
-        #     'name': 'set1b',
-        #     'evaluate': 'eval_simple',
-        #     'mutate': ('insert_mut', {'indpb': 0.05}),
-        #     'population': 100,
-        #     'generations': 100,
-        #     },
-
-        # 'set3b': {
-        #     'name': 'set1b',
-        #     'evaluate': 'eval_simple',
-        #     'mutate': ('invert_mut', {'indpb': 0.05}),
-        #     'population': 100,
-        #     'generations': 100,
-        #     },
-
-        # 'set4b': {
-        #     'name': 'set1b',
-        #     'evaluate': 'eval_simple',
-        #     'mutate': ('simple_inv', {'indpb': 0.05}),
-        #     'population': 100,
-        #     'generations': 100,
-        #     },
-
-    }
+    s = Store()
+    return s.jobs.find()
 
 
 def evaluate(set):

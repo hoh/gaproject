@@ -41,24 +41,27 @@ class Main(object):
     def run(self):
         'Launches the benchmarks.'
         box = Box('data/TSPBenchmark')
-        data = box.get('xqf131.tsp')
+        data = box.get('belgiumtour.tsp')
         # Overwriting data file if given:
         for arg in self.argv:
             if box.isfile(arg):
                 data = box.get(arg)
         print 'Using benchmark:', data.path
-        return gaproject.run.main(data)
+        gaproject.run.main(data)
+        print 'runned'
 
     def flush(self):
         'Deletes all results from the database.'
         s = gaproject.store.Store()
         s.runs.remove({})
+        print 'flushed'
 
     def results(self):
         'Prints and plots the results.'
         results = Results()
         results.print_()
         results.plot()
+        print 'resulted'
 
     def queue(self):
         'Loads jobs fron a JSON file and adds them to the queue.'
@@ -71,14 +74,23 @@ class Main(object):
         new_jobs = json.load(open(filename), encoding='utf-8')
         # Adding to DB queue:
         s = gaproject.store.Store()
-        for job in new_jobs:
-            s.jobs.add(job)
+        for job in new_jobs.values():
+            print job
+            s.jobs.insert(job)
+        print 'queued'
 
     def unqueue(self):
         "Deletes all jobs from the database's queue."
         s = gaproject.store.Store()
         s.jobs.remove({})
+        print 'unqueued'
 
+    def show_queue(self):
+        'Shows jobs in the queue.'
+        s = gaproject.store.Store()
+        for j in s.jobs.find():
+            print j
+        print 'showed queue'
 
 if __name__ == '__main__':
     Main(sys.argv)
