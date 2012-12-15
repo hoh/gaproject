@@ -4,7 +4,7 @@
 This is the main file of the project, used to setup and launch the computation.
 '''
 
-from sys import argv
+import sys
 import json
 
 import gaproject.run
@@ -17,8 +17,12 @@ class Main(object):
     the command line.
     '''
 
-    def __init__(self):
+    argv = ()
+
+    def __init__(self, argv):
         'Launches the main execution.'
+        self.argv = argv
+        # Launching given actions:
         if 'help' in argv or len(argv) == 1:
             self._print_help()
         else:
@@ -38,7 +42,7 @@ class Main(object):
         box = Box('data/TSPBenchmark')
         data = box.get('xqf131.tsp')
         # Overwriting data file if given:
-        for arg in argv:
+        for arg in self.argv:
             print arg
             if box.isfile(arg):
                 data = box.get(arg)
@@ -59,7 +63,7 @@ class Main(object):
     def queue(self):
         'Loads jobs fron a JSON file and adds them to the queue.'
         # Loading file:
-        filename = argv[argv.index('queue') + 1]
+        filename = self.argv[self.argv.index('queue') + 1]
         new_jobs = json.load(open(filename), encoding='utf-8')
         # Adding to DB queue:
         s = gaproject.store.Store()
@@ -73,4 +77,4 @@ class Main(object):
 
 
 if __name__ == '__main__':
-    Main()
+    Main(sys.argv)
