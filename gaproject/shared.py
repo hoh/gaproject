@@ -13,7 +13,9 @@ class Settings(object):
         self.generations = 101
         self.population = 101
         self.loop_removal = True
-        self.repetitions = 2
+        self.repetitions = 10
+        self.cxpb = 0.7
+        self.mutpb = 0.2
 
     def __getitem__(self, name):
         'Allows Settings to be used as a dictionary as well.'

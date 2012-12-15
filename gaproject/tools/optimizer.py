@@ -24,12 +24,12 @@ class Optimizer(object):
 
         # 0. Loading data
         box = Box('data/TSPBenchmark')
-        data = box.get('belgiumtour.tsp')
+        self.data = box.get('belgiumtour.tsp')
 
         # 1.
-        s = gaproject.store.Store()
-        s.runs.remove({})
-        s.jobs.remove({})
+        self.store = gaproject.store.Store()
+        self.store.runs.remove({})
+        self.store.jobs.remove({})
 
         # 2. Create dictionnaries for range
         base = {
@@ -39,18 +39,64 @@ class Optimizer(object):
             'population': 100,
             'generations': 100,
             'indices': 'path_creator',
+            'cxpb': 0.7,
+            'mutpb': 0.2,
         }
 
-        # for pop in (10, 20, 50, 100, 200, 500, 1000, 2000):
-        for pop in (10, 100, 1000):
-            set_ = base.copy()
-            set_['name'] = 'pop-{}'.format(pop)
-            set_['population'] = pop
-            set_['generations'] = 1000 / pop
-            s.jobs.insert(set_)
+        jobs = []
+        for pop in range(1, 20, 2):
+            job = base.copy()
+            job['name'] = 'pop-{}'.format(pop)
+            job['population'] = pop
+            job['generations'] = 1000 / pop
+            jobs.append(job)
+
+        best = self.launch_queue(jobs)['set']
+        del best['_id']
+
+        jobs = []
+        for mut in range(1, 100, 5):
+            job = best.copy()
+            job['name'] = '{}-{}'.format(job['name'], mut / 100.)
+            job['mutate'] = (job['mutate'][0], {'indpb': mut / 100.})
+            jobs.append(job)
+
+        best = self.launch_queue(jobs)['set']
+        del best['_id']
+
+        jobs = []
+        for cxpb in xrange(1, 100, 5):
+            job = best.copy()
+            job['name'] = '{}-{}'.format(job['name'], cxpb / 100.)
+            job['cxpb'] = cxpb / 100.
+            jobs.append(job)
+
+        best = self.launch_queue(jobs)['set']
+        del best['_id']
+
+        jobs = []
+        for mutpb in xrange(1, 100, 5):
+            job = best.copy()
+            job['name'] = '{}-{}'.format(job['name'], mutpb / 100.)
+            job['mutpb'] = mutpb / 100.
+            jobs.append(job)
+
+        best = self.launch_queue(jobs)['set']
+        del best['_id']
+
+        print 'runned'
+        # Getting best
+
+    def launch_queue(self, jobs):
+        'Launches a queue of jobs and returns the best result.'
+        self.store.runs.remove({})
+        self.store.jobs.remove({})
+
+        for job in jobs:
+            self.store.jobs.insert(job)
 
         # 3.
-        gaproject.run.main(data)
+        gaproject.run.main(self.data)
 
         # 4.
         results = Results()
@@ -69,5 +115,4 @@ class Optimizer(object):
         table.add_run(best)
         print table
 
-        print 'runned'
-        # Getting best
+        return best
