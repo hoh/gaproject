@@ -35,6 +35,7 @@ class MyDeap(object):
         all_operators = {
             'mate': tools.cxPartialyMatched,
             'mutate': (tools.mutShuffleIndexes, {'indpb': 0.05}),
+            # 'select': (tools.selTournament, {'tournsize': 3}),
             'select': (tools.selTournament, {'tournsize': 3}),
             'evaluate': None,  # This one MUST be implemented
         }
@@ -82,14 +83,13 @@ class MyDeap(object):
         stats.register("min", min)
         stats.register("max", max)
         return stats
-
     def run(self, toolbox, generations, population):
         pop = toolbox.population(n=population)
 
         hof = tools.HallOfFame(1)
         stats = self.stats()
 
-        algorithms.eaSimple(pop, toolbox, 0.7, 0.2, generations, stats=stats,
+        algorithms.eaSimple(pop, toolbox, 0.8, 0.5, generations, stats=stats,
                             halloffame=hof)
 
         return pop, stats, hof

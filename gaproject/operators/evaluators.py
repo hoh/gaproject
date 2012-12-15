@@ -19,11 +19,13 @@ def evalTSP(individual):
 def evalTSPAdjacentEdges(individual):
     #if individual is not a valid adjacent representation then it is a path representation
     #we change once that individual to path representation
-    if checkIfValidAdjacent(individual):
-        pass
-    else:
-        individual = array.array('i', fromPathToAdjacent(individual))
-    return evalTSP(fromAdjacentToPath(individual))
+    if not checkIfValidAdjacent(individual):
+        raise ValueError("Individual is not valid according to adjacent representation.\n", individual)
+    evaluation = evalTSP(fromAdjacentToPath(individual))
+    if evaluation == (0.0,):
+        print  individual
+        raw_input()
+    return evaluation
 
 
 def checkIfValidAdjacent(individual):
@@ -48,11 +50,11 @@ def fromAdjacentToPath(individual):
         #for each position in individual take the corresponding node
         newIndividual.append(individual[currentNode])
         currentNode = individual[currentNode]
-    return newIndividual
+    return array.array('i', newIndividual)
 
 
 def fromPathToAdjacent(individual):
-    newIndividual = [0] * len(individual)
+    newIndividual = array.array('i', [0] * len(individual))
     #for each node look at the adjacent node in the path representation
     for x in range(len(individual)):
         #visit the path representation saving the adjacent node in the new individuak

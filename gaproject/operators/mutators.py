@@ -10,14 +10,29 @@ from deap import tools
 mutShuffleIndexes = tools.mutShuffleIndexes
 
 from gaproject.operators.optimizers import loop_removal
+from gaproject.operators.evaluators import fromAdjacentToPath
+from gaproject.operators.evaluators import fromPathToAdjacent
+from gaproject.operators.evaluators import checkIfValidAdjacent
 
+
+def mutationFromAdjacentToPath(function):
+    def wrapped(individual,indpb):
+        if checkIfValidAdjacent(individual):
+            indi = fromAdjacentToPath(individual)
+        else:
+            indi = individual
+        result = function(indi, indpb)
+        return fromPathToAdjacent(result)
+    return wrapped
+
+mutShuffleIndexesAdj = mutationFromAdjacentToPath(mutShuffleIndexes)
 
 @loop_removal
 def insertionMutation(individual, indpb):
-    '''
+    """
     Chosing an node randomly and inserting it at a random position.
-    '''
-    if (random.random() > indpb):
+    """
+    if (random.random() < indpb):
         indexRandomNode = random.randint(0, len(individual) - 1)
         insertionPoint = random.randint(0, len(individual) - 1)
         removedValue = individual.pop(indexRandomNode)
@@ -25,13 +40,15 @@ def insertionMutation(individual, indpb):
 
     return individual
 
+insertionMutationAdj = mutationFromAdjacentToPath(insertionMutation)
+
 
 @loop_removal
 def inversionMutation(individual, indpb):
-    '''
+    """
     Chosing a Subtour then inserting it reversed at a different part of the individual.
-    '''
-    if(random.random() > indpb):
+    """
+    if(random.random() < indpb):
         #compute the beginning and end of the Subtour.
         begSubtour = random.randint(0, len(individual) - 1)
         endSubtour = random.randint(begSubtour, len(individual) - 1)
@@ -51,13 +68,14 @@ def inversionMutation(individual, indpb):
 
     return individual
 
+inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
 
 @loop_removal
 def simpleInversionMutation(individual, indpb):
-    '''
+    """
     Reversing a Subtour.
-    '''
-    if(random.random() > indpb):
+    """
+    if(random.random() < indpb):
         begSubtour = random.randint(0, len(individual) - 1)
         endSubtour = random.randint(begSubtour, len(individual) - 1)
 
@@ -70,8 +88,15 @@ def simpleInversionMutation(individual, indpb):
 
     return individual
 
+simpleInversionMutationAdj = mutationFromAdjacentToPath(simpleInversionMutation)
+
+
 __all__ = (mutShuffleIndexes,
            insertionMutation,
            inversionMutation,
            simpleInversionMutation,
+           insertionMutationAdj,
+           inversionMutationAdj,
+           simpleInversionMutationAdj,
+           mutShuffleIndexesAdj
            )

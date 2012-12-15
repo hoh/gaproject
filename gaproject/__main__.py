@@ -65,7 +65,7 @@ def main():
     'Launches all runs.'
 
     box = Box('data/TSPBenchmark')
-    data = box.get('belgiumtour.tsp')  # or belgiumtour.tsp
+    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
     shared.distance_map = data.dist_matrix()
     shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.distance_map)
 
