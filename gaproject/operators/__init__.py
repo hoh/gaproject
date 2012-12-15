@@ -7,10 +7,13 @@ This (sub-)library contains the operators used for this TSP problem.
 import mutators as mutators
 import evaluators as evaluators
 import crossovers as crossovers
+import creators
 
 # The aliases contain the nicknames used to refer to the operators
 # in the analysis.
 alias = {
+    'path_creator': creators.path_creator,
+
     'eval_simple': evaluators.evalTSP,
     'eval_adjacent': evaluators.evalTSPAdjacentEdges,
 
@@ -18,7 +21,7 @@ alias = {
     'insert_mut': mutators.insertionMutation,
     'invert_mut': mutators.inversionMutation,
     'simple_inv': mutators.simpleInversionMutation,
-    
+
     'cxOX': crossovers.cxOrdered,
     'cxHeuristic': crossovers.cxHeuristic,
     'cxSCX': crossovers.cxSimpleSCX,

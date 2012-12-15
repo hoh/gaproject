@@ -17,6 +17,7 @@ defaults = {
     'mate': 'cxERX',
     'population': 100,
     'generations': 100,
+    'indices': 'path_creator',
 }
 
 
@@ -48,6 +49,7 @@ def evaluate(set):
         'evaluate': alias[d['evaluate']],
         'mutate': (alias[mut_func], mut_args),
         'mate': (alias[d['mate']]),
+        'indices': alias[d['indices']],
         }
 
     # Integer values, no need to go through alias:
