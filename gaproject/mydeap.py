@@ -37,20 +37,15 @@ class MyDeap(object):
             'mutate': (tools.mutShuffleIndexes, {'indpb': 0.05}),
             'select': (tools.selTournament, {'tournsize': 3}),
             'evaluate': None,  # This one MUST be implemented
+            'indices': (random.sample, {'population': xrange(ind_size), 'k': ind_size}),
         }
         # Updating default values with operators
         for key in all_operators:
             if key in operators:
                 all_operators[key] = operators[key]
 
+        # Creating toolbox and populating it:
         toolbox = base.Toolbox()
-
-        # Attribute generator
-        toolbox.register("indices", random.sample, xrange(ind_size), ind_size)
-
-        # Structure initializers
-        toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
-        toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
         for key in all_operators:
             func = all_operators[key]
@@ -68,10 +63,9 @@ class MyDeap(object):
             # Registration:
             toolbox.register(key, func, **args)
 
-            # toolbox.register("mate", tools.cxPartialyMatched)
-            # toolbox.register("mutate", tools.mutShuffleIndexes, indpb=0.05)
-            # toolbox.register("select", tools.selTournament, tournsize=3)
-            # toolbox.register("evaluate", evaluator)
+        # Structure initializers
+        toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.indices)
+        toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 
         return toolbox
 
