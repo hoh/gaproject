@@ -22,7 +22,7 @@ defaults = {
 
 
 def get():
-
+    'Returns a list or generator of jobs to be executed.'
     s = Store()
     return s.jobs.find()
 
