@@ -27,6 +27,16 @@ def get():
     return s.jobs.find()
 
     # return [{
+    #     'name': 'set1adj',
+    #     'evaluate': 'eval_adjacent',
+    #     'mutate': ('mutshuf_adj', {'indpb': 0.05}),
+    #     'population': 10,
+    #     'generations': 1000,
+    #     'indices': 'adj_creator',
+    #     'mate': 'cxHeuristic',
+    #     }]
+
+    # return [{
     #     'name': 'set1a',
     #     'evaluate': 'eval_simple',
     #     'mutate': ('mutshuf', {'indpb': 0.05}),

@@ -10,22 +10,31 @@ from deap import tools
 mutShuffleIndexes = tools.mutShuffleIndexes
 
 from gaproject.operators.optimizers import loop_removal
-from gaproject.operators.evaluators import fromAdjacentToPath
-from gaproject.operators.evaluators import fromPathToAdjacent
-from gaproject.operators.evaluators import checkIfValidAdjacent
+from gaproject.tools.adjacent import fromAdjacentToPath
+from gaproject.tools.adjacent import fromPathToAdjacent
+from gaproject.tools.adjacent import checkIfValidAdjacent
 
 
 def mutationFromAdjacentToPath(function):
-    def wrapped(individual,indpb):
+    'Allows use of a Path representation based mutator on Adjascent representation.'
+
+    def wrapped(individual, indpb):
+        # print 'mut from:', individual
         if not checkIfValidAdjacent(individual):
-            ValueError
+            raise ValueError('Invalid error.')
+        # print 'individual', type(individual), individual
         indi = fromAdjacentToPath(individual)
-        r = function(indi, indpb)
-        individual[:] = fromPathToAdjacent(r)
+        # print 'indi', type(indi), indi
+        result = function(indi, indpb)
+        # print 'result', type(result), result
+        individual[:] = fromPathToAdjacent(result[0])
+        # print 'individual', type(individual), individual
+        # print '\n'*5
         return individual
     return wrapped
 
 mutShuffleIndexesAdj = mutationFromAdjacentToPath(mutShuffleIndexes)
+
 
 @loop_removal
 def insertionMutation(individual, indpb):
@@ -38,7 +47,7 @@ def insertionMutation(individual, indpb):
         removedValue = individual.pop(indexRandomNode)
         individual.insert(insertionPoint, removedValue)
 
-    return individual
+    return individual,
 
 insertionMutationAdj = mutationFromAdjacentToPath(insertionMutation)
 
@@ -66,9 +75,10 @@ def inversionMutation(individual, indpb):
         #create the new individual by inserting the Subtour at the insertion position
         individual[:] = individual[0:insertionPos] + Subtour + individual[insertionPos:]
 
-    return individual
+    return individual,
 
 inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
+
 
 @loop_removal
 def simpleInversionMutation(individual, indpb):
@@ -86,7 +96,7 @@ def simpleInversionMutation(individual, indpb):
         #create the new individual
         individual[:] = individual[0:begSubtour] + Subtour + individual[endSubtour:]
 
-    return individual
+    return individual,
 
 simpleInversionMutationAdj = mutationFromAdjacentToPath(simpleInversionMutation)
 

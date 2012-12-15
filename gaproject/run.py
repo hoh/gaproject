@@ -31,13 +31,17 @@ def run(data, operators):
     population = settings.fallback(operators, 'population')
     generations = settings.fallback(operators, 'generations')
     repetitions = settings.fallback(operators, 'repetitions')
+    cxpb = settings.fallback(operators, 'cxpb')
+    mutpb = settings.fallback(operators, 'mutpb')
 
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
         pop, stats, hof = mydeap.run(toolbox,
                                      generations,
-                                     population)
+                                     population,
+                                     cxpb,
+                                     mutpb)
 
         print 'Best so far:', operators['evaluate'](hof[0])
 
