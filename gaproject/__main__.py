@@ -5,112 +5,92 @@ This is the main file of the project, used to setup and launch the computation.
 '''
 
 import sys
-import random
+import json
 
+import gaproject.run
 from gaproject.data import Box
-from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot, analyze, fitness_plot
-from gaproject.store import Store
 from gaproject.tools.results import Results
-import gaproject.sets
-
-# Loading settings:
-import gaproject.shared as shared
-settings = shared.settings
 
 
-def run(data, operators):
-    '''Launches a run for the given dataset and genetic operators.
+class Main(object):
+    '''Main run function. Added method become automatically available from
+    the command line.
     '''
 
-    result = {'fitness': [],
-              'best': [],
-              'stats': [],
-              }
+    argv = ()
 
-    # Running the DEAP:
-    mydeap = MyDeap()
-    toolbox = mydeap.toolbox(len(data), operators)
-
-    # Getting main parameters from operators of default from settings:
-    population = settings.fallback(operators, 'population')
-    generations = settings.fallback(operators, 'generations')
-    repetitions = settings.fallback(operators, 'repetitions')
-
-    for repetition in xrange(repetitions):
-        random.seed(100 + repetition)
-
-        pop, stats, hof = mydeap.run(toolbox,
-                                     generations,
-                                     population)
-
-        print 'Best so far:', operators['evaluate'](hof[0])
-
-        if shared.settings.plot:
-            # Plotting the best result so far:
-            plot(hof[0], data)
-            fitness_plot(stats)
-
-        # Returning results as a dictionary:
-        fitness = operators['evaluate'](hof[0])
-
-        result['fitness'].append(fitness[0])
-        result['best'].append(list(hof[0]))
-        result['stats'].append(stats.data)
-
-    return result
-
-
-def main():
-    'Launches all runs.'
-
-    box = Box('data/TSPBenchmark')
-    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
-    shared.distance_map = data.dist_matrix()
-    shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.distance_map)
-
-    if shared.settings.plot:
-        data.plot()
-
-    # Initializing results gatherer:
-    if settings.use_db:
-        store = Store()
-    else:
-        results = {}
-
-    sets = gaproject.sets.get()
-    for b in sets:
-        set_b = sets[b]
-
-        operators = gaproject.sets.evaluate(set_b)
-        result = run(data, operators)
-        result['set'] = set_b
-
-        # Puting results in chose output:
-        if settings.use_db:
-            store.runs.insert(result)
+    def __init__(self, argv):
+        'Launches the main execution.'
+        self.argv = argv
+        # Launching given actions:
+        if 'help' in argv or len(argv) == 1:
+            self._print_help()
         else:
-            results[b] = result
+            for i in argv:
+                if hasattr(self, i):
+                    getattr(self, i)()
 
-        # 'average': numpy.average(scores),
-        # 'std': numpy.std(scores),
+    def _print_help(self):
+        'Prints all available actions.'
+        print('usage:')
+        for method_name in dir(self):
+            method = getattr(self, method_name)
+            if (not method_name.startswith('_')) and hasattr(method, '__func__'):
+                print('  {} - {}'.format(method_name, method.__doc__))
 
-    # Pretty printing the resulting scores:
-    if not settings.use_db:
-        analyze(results)
+    def run(self):
+        'Launches the benchmarks.'
+        box = Box('data/TSPBenchmark')
+        data = box.get('belgiumtour.tsp')
+        # Overwriting data file if given:
+        for arg in self.argv:
+            if box.isfile(arg):
+                data = box.get(arg)
+        print 'Using benchmark:', data.path
+        gaproject.run.main(data)
+        print 'runned'
 
-if __name__ == '__main__':
-    if 'results' in sys.argv:
+    def flush(self):
+        'Deletes all results from the database.'
+        s = gaproject.store.Store()
+        s.runs.remove({})
+        print 'flushed'
+
+    def results(self):
+        'Prints and plots the results.'
         results = Results()
         results.print_()
         results.plot()
-    else:
-        if 'flush' in sys.argv:
-            # Adding 'flush' parameter deletes all results from the database.
-            s = gaproject.store.Store()
-            s.runs.remove({})
-        if 'run' in sys.argv:
-            try:
-                hof = main()
-            except KeyboardInterrupt:
-                print 'Execution stopped.'
+        print 'resulted'
+
+    def queue(self):
+        'Loads jobs fron a JSON file and adds them to the queue.'
+        # Loading file:
+        try:
+            filename = self.argv[self.argv.index('queue') + 1]
+        except:
+            raise IndexError("No filename found after instruction 'queue'.")
+
+        new_jobs = json.load(open(filename), encoding='utf-8')
+        # Adding to DB queue:
+        s = gaproject.store.Store()
+        for job in new_jobs.values():
+            print job
+            s.jobs.insert(job)
+        print 'queued'
+
+    def unqueue(self):
+        "Deletes all jobs from the database's queue."
+        s = gaproject.store.Store()
+        s.jobs.remove({})
+        print 'unqueued'
+
+    def show_queue(self):
+        'Shows jobs in the queue.'
+        s = gaproject.store.Store()
+        for j in s.jobs.find():
+            print j
+        print 'showed queue'
+
+if __name__ == '__main__':
+    Main(sys.argv)

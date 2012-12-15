@@ -13,6 +13,8 @@ def dist(point1, point2):
 class Data(object):
     "Handles a set of data, can plot it, ..."
 
+    cached_dist_matrix = None
+
     def __init__(self, path):
         self.path = path
         self.positions = list(self.load())
@@ -26,14 +28,18 @@ class Data(object):
             yield float(line[0]), float(line[1])
 
     def dist_matrix(self):
-        "Returns a distance matrix between all points."
-        matrix = []
-        for point1 in self.positions:
-            line = []
-            for point2 in self.positions:
-                line.append(dist(point1, point2))
-            matrix.append(line)
-        return matrix
+        'Returns a distance matrix between all points (uses a cache).'
+        # Generating of not cached
+        if not self.cached_dist_matrix:
+            matrix = []
+            for point1 in self.positions:
+                line = []
+                for point2 in self.positions:
+                    line.append(dist(point1, point2))
+                matrix.append(line)
+            self.cached_dist_matrix = matrix
+        # Returning cached value:
+        return self.cached_dist_matrix
 
     def plot(self, mode='bo'):
         "Uses Matplotib to plot the nodes positions."
@@ -72,3 +78,8 @@ class Box(object):
         "Returns the content of a data file from it's name."
         full_path = os.path.join(self.root, path)
         return Data(full_path)
+
+    def isfile(self, path):
+        "Returns wether the file exists or not."
+        full_path = os.path.join(self.root, path)
+        return os.path.isfile(full_path)

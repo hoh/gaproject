@@ -6,7 +6,7 @@ import gaproject.shared as shared
 
 
 def dist(node1, node2):
-    return shared.distance_map[node1][node2]
+    return shared.data.dist_matrix()[node1][node2]
 
 
 def loop_removal(function):
