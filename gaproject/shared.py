@@ -6,6 +6,7 @@ import sys
 
 
 class Settings(object):
+    'Shared object containing all global settings.'
 
     def __init__(self):
         self.plot = 'plot' in sys.argv
@@ -15,6 +16,7 @@ class Settings(object):
         self.repetitions = 2
 
     def __getitem__(self, name):
+        'Allows Settings to be used as a dictionary as well.'
         return self.__getattribute__(name)
 
     def fallback(self, dico, key):
