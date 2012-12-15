@@ -9,6 +9,6 @@ def path_creator():
     return random.sample(xrange(ind_size), ind_size)
 
 def adj_creator():
+
     'Creates a valid adjacent individual'
-    ind_size = len(shared.data)
-    return fromPathToAdjacent(random.sample(xrange(ind_size), ind_size))
+    return fromPathToAdjacent(path_creator())

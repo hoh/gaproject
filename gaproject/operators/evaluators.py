@@ -33,6 +33,10 @@ def checkIfValidAdjacent(individual):
     while(len(visitedNodes) != len(individual)):
         #if a currentNode has already been visited we have a non valid adjacent individual
         if currentNode in visitedNodes:
+            print individual
+            print currentNode
+            print visitedNodes
+            raw_input()
             return False
         visitedNodes.append(currentNode)
         currentNode = individual[currentNode]

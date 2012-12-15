@@ -13,6 +13,7 @@ import creators
 # in the analysis.
 alias = {
     'path_creator': creators.path_creator,
+    'adj_creator': creators.adj_creator,
 
     'eval_simple': evaluators.evalTSP,
     'eval_adjacent': evaluators.evalTSPAdjacentEdges,
@@ -23,7 +24,7 @@ alias = {
     'simple_inv': mutators.simpleInversionMutation,
 
     'invert_mut_adj': mutators.inversionMutationAdj,
-    'inset_mut_adj': mutators.insertionMutationAdj,
+    'insert_mut_adj': mutators.insertionMutationAdj,
     'simple_inv_adj': mutators.simpleInversionMutationAdj,
     'mutshuf_adj': mutators.mutShuffleIndexesAdj,
 
