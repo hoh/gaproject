@@ -161,7 +161,7 @@ class CXSCXCalculator:
 
         #simple optimisation to try to select with a 1/3 probability the closest node
         if self.localHillClimbing:
-            a = random.randint(0, 1)
+            a = random.random()
             if a < 1/3:
                 closest = shared.data.dist_matrix()[currentNode][numpy.min(shared.data.dist_matrix()[currentNode]).index()]
                 if closest not in self.visited and closest != currentNode:
