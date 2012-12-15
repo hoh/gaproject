@@ -10,4 +10,5 @@ For all mutators, for all crossovers:
     * Optimize p(mutation)
     * Optimize p(crossovers)
 
+(Loop once or twice to get better values)
 (All optimisations in 10 exponential steps)
