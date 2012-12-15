@@ -21,8 +21,17 @@ defaults = {
 
 
 def get():
+
     s = Store()
     return s.jobs.find()
+
+    # return [{
+    #     'name': 'set1a',
+    #     'evaluate': 'eval_simple',
+    #     'mutate': ('mutshuf', {'indpb': 0.05}),
+    #     'population': 10,
+    #     'generations': 1000,
+    #     }]
 
 
 def evaluate(set):
