@@ -33,9 +33,10 @@ class Main(object):
     def _print_help(self):
         'Prints all available actions.'
         print('usage:')
-        for method in dir(self):
-            if not method.startswith('_'):
-                print('  {} - {}'.format(method, getattr(self, method).__doc__))
+        for method_name in dir(self):
+            method = getattr(self, method_name)
+            if (not method_name.startswith('_')) and hasattr(method, '__func__'):
+                print('  {} - {}'.format(method_name, method.__doc__))
 
     def run(self):
         'Launches the benchmarks.'
@@ -43,7 +44,6 @@ class Main(object):
         data = box.get('xqf131.tsp')
         # Overwriting data file if given:
         for arg in self.argv:
-            print arg
             if box.isfile(arg):
                 data = box.get(arg)
         print 'Using benchmark:', data.path
@@ -63,7 +63,11 @@ class Main(object):
     def queue(self):
         'Loads jobs fron a JSON file and adds them to the queue.'
         # Loading file:
-        filename = self.argv[self.argv.index('queue') + 1]
+        try:
+            filename = self.argv[self.argv.index('queue') + 1]
+        except:
+            raise IndexError("No filename found after instruction 'queue'.")
+
         new_jobs = json.load(open(filename), encoding='utf-8')
         # Adding to DB queue:
         s = gaproject.store.Store()
