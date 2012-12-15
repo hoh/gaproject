@@ -12,8 +12,7 @@ class Settings(object):
         self.generations = 101
         self.population = 101
         self.loop_removal = True
-        self.repetitions = 20
-        self.use_db = True
+        self.repetitions = 2
 
     def __getitem__(self, name):
         return self.__getattribute__(name)

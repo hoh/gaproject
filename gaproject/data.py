@@ -72,3 +72,8 @@ class Box(object):
         "Returns the content of a data file from it's name."
         full_path = os.path.join(self.root, path)
         return Data(full_path)
+
+    def isfile(self, path):
+        "Returns wether the file exists or not."
+        full_path = os.path.join(self.root, path)
+        return os.path.isfile(full_path)

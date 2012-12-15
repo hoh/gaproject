@@ -4,9 +4,8 @@ Main functions to run the genetic algorighms and benchmarks.
 
 import random
 
-from gaproject.data import Box
 from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot, analyze, fitness_plot
+from gaproject.analysis import plot, fitness_plot
 from gaproject.store import Store
 import gaproject.sets
 
@@ -57,22 +56,16 @@ def run(data, operators):
     return result
 
 
-def main():
+def main(data):
     'Launches all runs.'
 
-    box = Box('data/TSPBenchmark')
-    data = box.get('xqf131.tsp')  # or belgiumtour.tsp
     shared.distance_map = data.dist_matrix()
     shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.distance_map)
 
     if shared.settings.plot:
         data.plot()
 
-    # Initializing results gatherer:
-    if settings.use_db:
-        store = Store()
-    else:
-        results = {}
+    store = Store()
 
     sets = gaproject.sets.get()
     for b in sets:
@@ -82,15 +75,5 @@ def main():
         result = run(data, operators)
         result['set'] = set_b
 
-        # Puting results in chose output:
-        if settings.use_db:
-            store.runs.insert(result)
-        else:
-            results[b] = result
-
-        # 'average': numpy.average(scores),
-        # 'std': numpy.std(scores),
-
-    # Pretty printing the resulting scores:
-    if not settings.use_db:
-        analyze(results)
+        # Puting results in DB:
+        store.runs.insert(result)
