@@ -20,7 +20,7 @@ class Main(object):
 
     argv = ()
 
-    def __init__(self, argv):
+    def __init__(self, argv=()):
         'Launches the main execution.'
         self.argv = argv
         # Launching given actions:
