@@ -59,8 +59,8 @@ def run(data, operators):
 def main(data):
     'Launches all runs.'
 
-    shared.distance_map = data.dist_matrix()
-    shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.distance_map)
+    shared.data = data
+    shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.data.dist_matrix())
 
     if shared.settings.plot:
         data.plot()

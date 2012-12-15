@@ -30,8 +30,8 @@ def cxHeuristic(individual1, individual2):
     visitedNodes.append(currentNode)
     while(len(child) != len(individual1)):
         #copmare which edge is shorter in each invidividual
-        edge_distance1 = shared.distance_map[currentNode][individual1[currentNode]]
-        edge_distance2 = shared.distance_map[currentNode][individual2[currentNode]]
+        edge_distance1 = shared.data.dist_matrix()[currentNode][individual1[currentNode]]
+        edge_distance2 = shared.data.dist_matrix()[currentNode][individual2[currentNode]]
 
         if edge_distance1 > edge_distance2:
             #if no loop is introduced proceed to save the edge in child
@@ -124,7 +124,7 @@ class CXSCXCalculator:
                 legitNodeIn1 = candidateLegitNodeIn1
             else:
                 legitNodeIn1 = None
-            #check if the candidate node in individual 2 has not been visited 
+            #check if the candidate node in individual 2 has not been visited
             if candidateLegitNodeIn2 not in self.visitedNodes:
                 legitNodeIn2 = candidateLegitNodeIn2
             else:
@@ -132,7 +132,7 @@ class CXSCXCalculator:
                 legitNodeIn2 = None
             #with lowest cost
             if(legitNodeIn1 and legitNodeIn2):
-                if shared.distance_map[currentNode][legitNodeIn1] > shared.distance_map[currentNode][legitNodeIn2]:
+                if shared.data.dist_matrix()[currentNode][legitNodeIn1] > shared.data.dist_matrix()[currentNode][legitNodeIn2]:
                     child.append(legitNodeIn2)
                     self.visitedNodes.append(legitNodeIn2)
                     currentNode = legitNodeIn2
@@ -163,7 +163,7 @@ class CXSCXCalculator:
         if self.localHillClimbing:
             a = random.randint(0, 1)
             if a < 1/3:
-                closest = shared.distance_map[currentNode][numpy.min(shared.distance_map[currentNode]).index()]  
+                closest = shared.data.dist_matrix()[currentNode][numpy.min(shared.data.dist_matrix()[currentNode]).index()]
                 if closest not in self.visited and closest != currentNode:
                     return closest
 

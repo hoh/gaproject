@@ -23,5 +23,6 @@ class Settings(object):
 
 settings = Settings()
 
-# The following will be replaced by the real value in __main__.py:
-distance_map = None
+# The following will be replaced by the real value in run.py:
+data = None
+orderedSequenceOfNodes = None
