@@ -5,14 +5,14 @@ Here should come the mutation functions.
 
 import random
 
-# Importing the mutator from DEAP
-from deap import tools
-mutShuffleIndexes = tools.mutShuffleIndexes
-
 from gaproject.operators.optimizers import loop_removal
 from gaproject.tools.adjacent import fromAdjacentToPath
 from gaproject.tools.adjacent import fromPathToAdjacent
 from gaproject.tools.adjacent import checkIfValidAdjacent
+
+# Importing the mutator from DEAP
+from deap import tools
+mutShuffleIndexes = loop_removal(tools.mutShuffleIndexes)
 
 
 def mutationFromAdjacentToPath(function):
