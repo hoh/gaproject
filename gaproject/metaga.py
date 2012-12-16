@@ -18,12 +18,12 @@ import deap.tools as tools
 from deap.algorithms import varAnd
 
 
-def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
+def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
              halloffame=None, verbose=__debug__):
-    """This algorithm reproduce the simplest evolutionary algorithm as
-    presented in chapter 7 of [Back2000]_.
+    """This algorithm implements MetaGA and compares individuals in
+    subpopulations to direct the mutations.
 
-    :param population: A list of individuals.
+    :param population: A list of populations of individuals.
     :param toolbox: A :class:`~deap.base.Toolbox` that contains the evolution
                     operators.
     :param cxpb: The probability of mating two individuals.
@@ -64,50 +64,54 @@ def eaSimple(population, toolbox, cxpb, mutpb, ngen, stats=None,
     .. [Back2000] Back, Fogel and Michalewicz, "Evolutionary Computation 1 :
        Basic Algorithms and Operators", 2000.
     """
-    # Evaluate the individuals with an invalid fitness
-    invalid_ind = [ind for ind in population if not ind.fitness.valid]
-    fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
-    for ind, fit in zip(invalid_ind, fitnesses):
-        ind.fitness.values = fit
 
-    if halloffame is not None:
-        halloffame.update(population)
-    if stats is not None:
-        stats.update(population)
-    if verbose:
-        column_names = ["gen", "evals"]
-        if stats is not None:
-            column_names += stats.functions.keys()
-        logger = tools.EvolutionLogger(column_names)
-        logger.logHeader()
-        logger.logGeneration(evals=len(population), gen=0, stats=stats)
-
-    # Begin the generational process
-    for gen in xrange(1, ngen + 1):
-        # Select the next generation individuals
-        offspring = toolbox.select(population, len(population))
-
-        # Variate the pool of individuals
-        offspring = varAnd(offspring, toolbox, cxpb, mutpb)
-
+    for population in populations:
         # Evaluate the individuals with an invalid fitness
-        invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+        invalid_ind = [ind for ind in population if not ind.fitness.valid]
         fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
-        # Update the hall of fame with the generated individuals
         if halloffame is not None:
-            halloffame.update(offspring)
-
-        # Replace the current population by the offspring
-        population[:] = offspring
-
-        # Update the statistics with the new population
+            halloffame.update(population)
         if stats is not None:
             stats.update(population)
-
         if verbose:
-            logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
+            column_names = ["gen", "evals"]
+            if stats is not None:
+                column_names += stats.functions.keys()
+            logger = tools.EvolutionLogger(column_names)
+            logger.logHeader()
+            logger.logGeneration(evals=len(population), gen=0, stats=stats)
 
-    return population
+    # Begin the generational process
+    for gen in xrange(1, ngen + 1):
+
+        for population in populations:
+            # Select the next generation individuals
+            offspring = toolbox.select(population, len(population))
+
+            # Variate the pool of individuals
+            offspring = varAnd(offspring, toolbox, cxpb, mutpb)
+
+            # Evaluate the individuals with an invalid fitness
+            invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+            fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+            for ind, fit in zip(invalid_ind, fitnesses):
+                ind.fitness.values = fit
+
+            # Update the hall of fame with the generated individuals
+            if halloffame is not None:
+                halloffame.update(offspring)
+
+            # Replace the current population by the offspring
+            population[:] = offspring
+
+            # Update the statistics with the new population
+            if stats is not None:
+                stats.update(population)
+
+            if verbose:
+                logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
+
+    return populations

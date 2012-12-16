@@ -4,9 +4,12 @@ Main functions to run the genetic algorighms and benchmarks.
 
 import random
 
+from deap import algorithms
+
 from gaproject.mydeap import MyDeap
 from gaproject.analysis import plot, fitness_plot
 from gaproject.store import Store
+import gaproject.metaga as metaga
 import gaproject.sets
 
 # Loading settings:
@@ -37,11 +40,26 @@ def run(data, operators):
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
-        pop, stats, hof = mydeap.run(toolbox,
-                                     generations,
-                                     population,
-                                     cxpb,
-                                     mutpb)
+        if shared.settings.meta_ga is False:
+            pop = toolbox.population(n=population)
+            algo = algorithms.eaSimple
+            pop, stats, hof = mydeap.run(algo,
+                                         pop,
+                                         toolbox,
+                                         generations,
+                                         population,
+                                         cxpb,
+                                         mutpb)
+        else:
+            pops = [toolbox.population(n=population) for i in xrange(settings.meta_ga)]
+            algo = metaga.eaMeta
+            pop, stats, hof = mydeap.run(algo,
+                                         pops,
+                                         toolbox,
+                                         generations,
+                                         population,
+                                         cxpb,
+                                         mutpb)
 
         print 'Best so far:', operators['evaluate'](hof[0])
 
