@@ -77,13 +77,10 @@ class MyDeap(object):
         stats.register("max", max)
         return stats
 
-    def run(self, toolbox, generations, population, cxpb, mutpb):
-        pop = toolbox.population(n=population)
+    def run(self, algo, pop, toolbox, generations, population, cxpb, mutpb):
 
         hof = tools.HallOfFame(1)
         stats = self.stats()
-
-        algorithms.eaSimple(pop, toolbox, cxpb, mutpb, generations, stats=stats,
-                            halloffame=hof)
+        algo(pop, toolbox, cxpb, mutpb, generations, stats=stats, halloffame=hof)
 
         return pop, stats, hof

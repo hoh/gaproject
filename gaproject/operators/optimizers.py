@@ -27,6 +27,7 @@ def remove_loops(individual):
     distance from the next node to it's follower and switching
     them if leads to an improvement.
     '''
+    individual = individual[0]
     length = len(individual)
 
     for i in xrange(len(individual)):
@@ -43,4 +44,4 @@ def remove_loops(individual):
         if d2 < d1:
             individual[i], individual[next] = individual[next], individual[i]
 
-    return individual
+    return individual,
