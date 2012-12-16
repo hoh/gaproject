@@ -18,6 +18,8 @@ defaults = {
     'population': 100,
     'generations': 100,
     'indices': 'path_creator',
+    'cxpb': 0.73,
+    'mutpb': 0.23,
 }
 
 
@@ -63,7 +65,7 @@ def evaluate(set):
         }
 
     # Integer values, no need to go through alias:
-    for key in ('population', 'generations'):
+    for key in ('population', 'generations', 'cxpb', 'mutpb'):
         if key in d:
             result[key] = d[key]
 

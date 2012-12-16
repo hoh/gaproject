@@ -39,21 +39,23 @@ class Optimizer(object):
             'population': 100,
             'generations': 100,
             'indices': 'path_creator',
-            'cxpb': 0.7,
-            'mutpb': 0.2,
+            'cxpb': 0.70,
+            'mutpb': 0.20,
         }
 
+        print 'Optimizing population'
         jobs = []
-        for pop in range(1, 20, 2):
+        for pop in range(1, 1000, 50):
             job = base.copy()
             job['name'] = 'pop-{}'.format(pop)
             job['population'] = pop
-            job['generations'] = 1000 / pop
+            job['generations'] = 50000 / pop
             jobs.append(job)
 
         best = self.launch_queue(jobs)['set']
         del best['_id']
 
+        print 'Optimizing mutations'
         jobs = []
         for mut in range(1, 100, 5):
             job = best.copy()
@@ -64,6 +66,7 @@ class Optimizer(object):
         best = self.launch_queue(jobs)['set']
         del best['_id']
 
+        print 'Optimizing cxpb'
         jobs = []
         for cxpb in xrange(1, 100, 5):
             job = best.copy()
@@ -74,6 +77,7 @@ class Optimizer(object):
         best = self.launch_queue(jobs)['set']
         del best['_id']
 
+        print 'Optimizing mutpb'
         jobs = []
         for mutpb in xrange(1, 100, 5):
             job = best.copy()

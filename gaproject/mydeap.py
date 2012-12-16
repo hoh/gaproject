@@ -77,7 +77,7 @@ class MyDeap(object):
         stats.register("max", max)
         return stats
 
-    def run(self, toolbox, generations, population, cxpb=0.7, mutpb=0.2):
+    def run(self, toolbox, generations, population, cxpb, mutpb):
         pop = toolbox.population(n=population)
 
         hof = tools.HallOfFame(1)
