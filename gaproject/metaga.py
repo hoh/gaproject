@@ -114,4 +114,7 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
             if verbose:
                 logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
 
+        # MetaGA part: updating mutation probabilities
+
+
     return populations
