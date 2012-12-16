@@ -194,16 +194,23 @@ class CXERXCalculator:
     def __init__(self, individual1, individual2):
         self.individual2 = individual2
         self.individual1 = individual1
-        self.edgeMap = {}
+        
 
     def crossover(self):
-        self._buildEdgeMap()
-        return self._createChild()
+        child1 = self._createChild(self.individual1, self.individual2)
+        child2 = self._createChild(self.individual2, self.individual1)
+        self.individual1[:] = child1[:]
+        self.individual2[:] = child2[:]
 
-    def _createChild(self):
+        return self.individual1, self.individual2
+
+    def _createChild(self, individual1, individual2):
+
+        self._buildEdgeMap(individual1, individual2)
+
         child = creator.Individual()
         #step1
-        currentNode = self.individual1[random.randint(0, len(self.individual1) - 1)]
+        currentNode = individual1[random.randint(0, len(individual1) - 1)]
         while True:
             child.append(currentNode)
             #extract the nodes linked to current node
@@ -241,21 +248,23 @@ class CXERXCalculator:
                 else:
                     #chose as next node any remaining node at random
                     currentNode = self.edgeMap.keys()[random.randint(0, len(self.edgeMap.keys()) - 1)]
+        
         return child
 
-    def _buildEdgeMap(self):
+    def _buildEdgeMap(self,individual1,individual2):
         """
         For each node looks at the corresponding edges in each individual and creates
         an edgeMap entry with as a set of neighboring nodes
 
         """
-        for node in self.individual1:
-            pos1 = self.individual1.index(node)
-            pos2 = self.individual2.index(node)
-            neighborg1 = self.individual1[(pos1 - 1) % len(self.individual1)]
-            neighborg2 = self.individual1[(pos1 + 1) % len(self.individual1)]
-            neighborg3 = self.individual2[(pos2 - 1) % len(self.individual2)]
-            neighborg4 = self.individual2[(pos2 + 1) % len(self.individual2)]
+        self.edgeMap = {}
+        for node in individual1:
+            pos1 = individual1.index(node)
+            pos2 = individual2.index(node)
+            neighborg1 = individual1[(pos1 - 1) % len(individual1)]
+            neighborg2 = individual1[(pos1 + 1) % len(individual1)]
+            neighborg3 = individual2[(pos2 - 1) % len(individual2)]
+            neighborg4 = individual2[(pos2 + 1) % len(individual2)]
             self.edgeMap[node] = set([neighborg1, neighborg2, neighborg3, neighborg4])
 
     def _cleanupNodeFromEdgeMap(self, referenceNode):

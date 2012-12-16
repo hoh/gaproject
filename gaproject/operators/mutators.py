@@ -21,7 +21,7 @@ def mutationFromAdjacentToPath(function):
     def wrapped(individual, indpb):
         # print 'mut from:', individual
         if not checkIfValidAdjacent(individual):
-            raise ValueError('Invalid error.')
+            raise ValueError('Invalid individual. Does not comply with adjacent repr.')
         # print 'individual', type(individual), individual
         indi = fromAdjacentToPath(individual)
         # print 'indi', type(indi), indi
