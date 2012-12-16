@@ -61,7 +61,8 @@ class Main(object):
         'Prints and plots the results.'
         results = Results()
         results.print_()
-        results.plot()
+        if 'plot' in self.argv:
+            results.plot()
         print 'resulted'
 
     def queue(self):
