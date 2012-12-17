@@ -14,6 +14,11 @@ The function below is based on DEAP's deap.algorithms.eaSimple and fitted to
 the needs of the current problem.
 '''
 
+from difflib import SequenceMatcher
+from pprint import pprint
+
+from operator import attrgetter
+
 import deap.tools as tools
 from deap.algorithms import varAnd
 
@@ -114,7 +119,19 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
             if verbose:
                 logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
 
-        # MetaGA part: updating mutation probabilities
+        # ===== MetaGA part: updating mutation probabilities =====
 
+        # List of best individuals:
+        best_individuals = [sorted(pop, key=attrgetter("fitness"), reverse=True)[0]
+                            for pop in populations]
+
+        # Computing matches and reverse-matches:
+        matcher = SequenceMatcher(None, best_individuals[0], best_individuals[1])
+        matches = matcher.get_matching_blocks()
+        print [i.size for i in matches if i.size > 1]
+        # Reverting one of the individuals:
+        reverse_matcher = SequenceMatcher(None, best_individuals[0][::-1], best_individuals[1])
+        reverse_matches = reverse_matcher.get_matching_blocks()
+        print [i.size for i in reverse_matches if i.size > 1]
 
     return populations
