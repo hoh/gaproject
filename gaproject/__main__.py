@@ -42,7 +42,7 @@ class Main(object):
     def run(self):
         'Launches the benchmarks.'
         box = Box('data/TSPBenchmark')
-        data = box.get('belgiumtour.tsp')
+        data = box.get('xqf131.tsp')
         # Overwriting data file if given:
         for arg in self.argv:
             if box.isfile(arg):
