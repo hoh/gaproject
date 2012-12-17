@@ -2,7 +2,6 @@
 from deap import creator
 import random
 import gaproject.shared as shared
-import numpy
 
 # Importing the ordered crossover from DEAP
 from deap import tools
@@ -11,62 +10,81 @@ cxPMX = tools.cxPartialyMatched
 
 
 def cxHeuristic(individual1, individual2):
-    """
-    This crossover expects individuals according to adjacent representation.
-    It tries to save edges that have lower cost.
-    In order to avoid loops, random edges are created (note that this is a sort of mutation)
+    child1 = cxHeuristic(individual1,individual2).crossover()
+    child2 = cxHeuristic(individual2,individual1).crossover()
+    individual1[:] = child1[:]
+    individual2[:] = child2[:]
+    return individual1, individual2
+
+class cxHeuristic:
 
     """
+    Contains the logic to perform heuristic crossover. Only valid for adjacent representation.
 
-    child = creator.Individual()
-    #temporarily we fill in child using the values in individual1
-    #these values will be overwritten
-    child[:] = individual1[:]
-    availableNodes = range(len(individual1))
-    visitedNodes = []
-    #chose a node at random to start with
-    currentNode =  random.randint(0, len(individual1) - 1)
-    availableNodes.pop(currentNode)
-    visitedNodes.append(currentNode)
-    while(len(child) != len(individual1)):
-        #copmare which edge is shorter in each invidividual
-        edge_distance1 = shared.data.dist_matrix()[currentNode][individual1[currentNode]]
-        edge_distance2 = shared.data.dist_matrix()[currentNode][individual2[currentNode]]
+    """
 
-        if edge_distance1 > edge_distance2:
-            #if no loop is introduced proceed to save the edge in child
-            if individual2[currentNode] not in visitedNodes:
-                child[currentNode] = individual2[currentNode]
-                visitedNodes.append(individual2[currentNode])
-                availableNodes.pop(individual2[currentNode])
-                currentNode = individual2[currentNode]
+    def __init__(self, individual1, individual2):
+        self.individual2 = individual2
+        self.individual1 = individual1
+
+
+    def crossover(self):
+        """
+        This crossover expects individuals according to adjacent representation.
+        It tries to save edges that have lower cost.
+        In order to avoid loops, random edges are created (note that this is a sort of mutation)
+
+        """
+
+        child = creator.Individual()
+        #temporarily we fill in child using the values in self.individual1
+        #these values will be overwritten
+        child[:] = self.individual1[:]
+        availableNodes = range(len(self.individual1))
+        visitedNodes = []
+        #chose a node at random to start with
+        currentNode = random.randint(0, len(self.individual1) - 1)
+        availableNodes.pop(currentNode)
+        visitedNodes.append(currentNode)
+        while(len(child) != len(self.individual1)):
+            #copmare which edge is shorter in each invidividual
+            edge_distance1 = shared.data.dist_matrix()[currentNode][self.individual1[currentNode]]
+            edge_distance2 = shared.data.dist_matrix()[currentNode][self.individual2[currentNode]]
+
+            if edge_distance1 > edge_distance2:
+                #if no loop is introduced proceed to save the edge in child
+                if self.individual2[currentNode] not in visitedNodes:
+                    child[currentNode] = self.individual2[currentNode]
+                    visitedNodes.append(self.individual2[currentNode])
+                    availableNodes.pop(self.individual2[currentNode])
+                    currentNode = self.individual2[currentNode]
+                else:
+                    #if a loop would have been introduced try to generate a random edge
+                    candidateNode = random.randint(0, len(self.individual1) - 1)
+                    while(candidateNode not in availableNodes):
+                        candidateNode = random.randint(0, len(self.individual1) - 1)
+                    child[currentNode] = candidateNode
+                    visitedNodes.append(candidateNode)
+                    availableNodes.pop(candidateNode)
+                    currentNode = candidateNode
+
             else:
-                #if a loop would have been introduced try to generate a random edge
-                candidateNode = random.randint(0, len(individual1) - 1)
-                while(candidateNode not in availableNodes):
-                    candidateNode = random.randint(0, len(individual1) - 1)
-                child[currentNode] = candidateNode
-                visitedNodes.append(candidateNode)
-                availableNodes.pop(candidateNode)
-                currentNode = candidateNode
-
-        else:
-             #if no loop is introduced proceed to save the edge in child
-            if individual1[currentNode] not in visitedNodes:
-                child[currentNode] = individual1[currentNode]
-                visitedNodes.append(individual1[currentNode])
-                availableNodes.pop(individual1[currentNode])
-                currentNode = individual1[currentNode]
-            else:
-                #if a loop would have been introdued try to generate a random edge
-                candidateNode = random.randint(0, len(individual1) - 1)
-                while(candidateNode not in availableNodes):
-                    candidateNode = random.randint(0, len(individual1) - 1)
-                child[currentNode] = candidateNode
-                visitedNodes.append(candidateNode)
-                availableNodes.pop(candidateNode)
-                currentNode = candidateNode
-    return child
+                 #if no loop is introduced proceed to save the edge in child
+                if self.individual1[currentNode] not in visitedNodes:
+                    child[currentNode] = self.individual1[currentNode]
+                    visitedNodes.append(self.individual1[currentNode])
+                    availableNodes.pop(self.individual1[currentNode])
+                    currentNode = self.individual1[currentNode]
+                else:
+                    #if a loop would have been introdued try to generate a random edge
+                    candidateNode = random.randint(0, len(self.individual1) - 1)
+                    while(candidateNode not in availableNodes):
+                        candidateNode = random.randint(0, len(self.individual1) - 1)
+                    child[currentNode] = candidateNode
+                    visitedNodes.append(candidateNode)
+                    availableNodes.pop(candidateNode)
+                    currentNode = candidateNode
+        return child
 
 
 def cxEnhancedSCX(individual1, individual2):
@@ -75,7 +93,11 @@ def cxEnhancedSCX(individual1, individual2):
 
     """
     localHillClimbing = True
-    return CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes, localHillClimbing).crossover()
+    child1 = CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes, localHillClimbing).crossover()
+    child2 =  CXSCXCalculator(individual1, individual2, shared.orderedSequenceOfNodes, localHillClimbing).crossover()
+    individual1[:] = child1[:]
+    individual2[:] = child2[:]
+    return individual1, individual2
 
 
 def cxSimpleSCX(individual1, individual2):
@@ -85,7 +107,11 @@ def cxSimpleSCX(individual1, individual2):
     """
     localHillClimbing = False
     sequenceOfNodes = range(len(individual1))
-    return CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
+    child1 = CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
+    child2 =  CXSCXCalculator(individual2, individual1, sequenceOfNodes, localHillClimbing).crossover()    
+    individual1[:] = child1[:]
+    individual2[:] = child2[:]
+    return individual1, individual2
 
 
 class CXSCXCalculator:
@@ -99,7 +125,6 @@ class CXSCXCalculator:
     def __init__(self, individual1, individual2, sequenceOfNodes, localHillClimbing):
         self.individual2 = individual2
         self.individual1 = individual1
-        self.visitedNodes = []
         self.sequenceOfNodes = sequenceOfNodes
         self.localHillClimbing = localHillClimbing
 
@@ -108,6 +133,8 @@ class CXSCXCalculator:
         Computes the SCX crossover.
 
         """
+        self.visitedNodes = []
+
         child = creator.Individual()
 
         #chose currentNodes randomly

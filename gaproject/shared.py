@@ -16,7 +16,7 @@ class Settings(object):
         self.repetitions = 2
         self.cxpb = 0.75
         self.mutpb = 0.25
-        self.meta_ga = 2
+        self.meta_ga = False
 
     def __getitem__(self, name):
         'Allows Settings to be used as a dictionary as well.'

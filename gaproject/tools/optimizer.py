@@ -24,7 +24,7 @@ class Optimizer(object):
 
         # 0. Loading data
         box = Box('data/TSPBenchmark')
-        self.data = box.get('belgiumtour.tsp')
+        self.data = box.get('xqf131.tsp')
 
         # 1.
         self.store = gaproject.store.Store()
