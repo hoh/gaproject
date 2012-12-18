@@ -11,6 +11,7 @@ import gaproject.run
 from gaproject.data import Box
 from gaproject.tools.results import Results
 from gaproject.tools.optimizer import Optimizer
+from gaproject.tools.benchmarker import Benchmarker
 
 
 class Main(object):
@@ -98,6 +99,11 @@ class Main(object):
         'Launches parameter optimization.'
         optimize = Optimizer()
         optimize.go()
+
+    def benchmark(self):
+        'Launches benchmarking.'
+        benchmark = Benchmarker()
+        benchmark.go()
 
 if __name__ == '__main__':
     Main(sys.argv)

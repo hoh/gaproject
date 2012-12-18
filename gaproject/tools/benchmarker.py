@@ -1,6 +1,6 @@
 from gaproject.data import Box
 from gaproject.tools.launcher import Launcher
-
+import gaproject.analysis as analysis
 
 class Benchmarker(object):
     'Main class for benchmarker.'
@@ -15,8 +15,8 @@ class Benchmarker(object):
         1.loads problem
         1. Clears queue and results.
         2. create new job
-        3. Executes the queue and retrieves the best result
-        4. New variable and back to [2].
+        3. Executes the queue and retrieves the best result and plots it
+        4. New variable and back to [1].
 
         '''
         print 'Go benchmarker go!'
@@ -51,7 +51,9 @@ class Benchmarker(object):
             job['name'] = 'bmark-{}'.format(problem)
 
             #4. launch job
-            self.launcher.launch_queue([job])
+            best = self.launcher.launch_queue([job],plot_all=True)
+            # plot solution
+            analysis.plot(best['best'][0],data)
 
         print 'done!'
         raw_input()

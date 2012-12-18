@@ -15,7 +15,7 @@ class Launcher(object):
         self.data = data
 
     def launch_queue(self, jobs, plot_all):
-        'Launches a queue of jobs and returns the best result.'
+        'Launches a queue of jobs and returns the best run.'
         self.store.runs.remove({})
         self.store.jobs.remove({})
 

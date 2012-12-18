@@ -15,8 +15,9 @@ def plot(individual, data):
     x_axis = [pos[0] for pos in positions]
     y_axis = [pos[1] for pos in positions]
 
+    plt.figure()
     plt.plot(x_axis, y_axis, 'ro-')
-    plt.show()
+    plt.show(block=False)
 
 
 def fitness_plot(stats):
@@ -28,12 +29,13 @@ def fitness_plot(stats):
         'Transforms the list found in stats to a plottable list.'
         return [fit[0] for fit in stats_list[0]]
 
+    plt.figure()
     plt.plot(adjust(stats.data['min']), 'b-')
     plt.plot(adjust(stats.data['max']), 'r-')
     plt.plot(adjust(stats.data['avg']), 'g-')
     plt.plot(adjust(stats.data['std']), 'y-')
 
-    plt.show()
+    plt.show(block=False)
 
 
 def analyze(results):
