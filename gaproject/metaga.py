@@ -14,6 +14,8 @@ The function below is based on DEAP's deap.algorithms.eaSimple and fitted to
 the needs of the current problem.
 '''
 
+import random
+
 from difflib import SequenceMatcher
 from itertools import combinations, chain
 
@@ -57,29 +59,64 @@ class WeightMatrix(object):
 
         At the moment, gives a weight of then size of the vector and
         sums up over all iterations.'''
-        for couple in combinations(vector, 2):
+        size = len(vector)
+        for i in xrange(size - 1):
+            couple = (vector[i], vector[i + 1])
             if couple in self:
                 self[couple] += len(vector)
             else:
                 self[couple] = len(vector)
+        # for couple in combinations(vector, 2):
+        #     if couple in self:
+        #         self[couple] += len(vector)
+        #     else:
+        #         self[couple] = len(vector)
 
-    def scale(self):
-        '''Returns a scaling factor for the weight matrix, namely
-        the size of an individual divided by probability for each node.
-        '''
-        # Summ of value for couples present:
-        sum_factors = sum([(1. / n) for n in self._couples.values()])
-        # 1 * number of couples not present:
-        sum_rest = (self._max_size - len(self._couples))
+    # def scale(self):
+    #     '''Returns a scaling factor for the weight matrix, namely
+    #     the size of an individual divided by probability for each node.
+    #     '''
+    #     # Summ of value for couples present:
+    #     sum_factors = sum(self.weight(n) for n in self._couples)
+    #     # 1 * number of couples not present:
+    #     sum_rest = (self._max_size - len(self._couples))
 
-        return float(self._max_size) / (sum_factors + sum_rest)
+    #     return float(self._max_size) / (sum_factors + sum_rest)
 
     def weight(self, couple, unsorted=False):
         '''Returns a probability associated to the given couple.
         '''
         if unsorted:
             couple = tuple(sorted(couple))
-        return 1. / self[couple]
+
+        f = 1. / self[couple]
+        return 1 - ((1 - f) / 4)
+
+    def node_weight(self, node, ind):
+        '''Computes the weight of removing the given node from the
+        given individual.
+        '''
+        i = ind.index(node)
+        couple1 = (ind[i - 1], node)
+        couple2 = (ind[(i + 1) % len(ind)], node)
+
+        w = shared.weight_matrix.weight(couple1, unsorted=True) \
+          * shared.weight_matrix.weight(couple2, unsorted=True)
+        return w
+
+    def choice(self, ind):
+        '''Pseudo-randomly choses a node from the individual, depending
+        on the weight matrix.
+        '''
+        # Selecting via roulette wheel:
+        weights = [self.node_weight(node, ind) for node in ind]
+        pick = random.uniform(0, sum(weights))
+        current = 0
+        for i in xrange(len(ind)):
+            node = ind[i]
+            current += weights
+            if current > pick:
+                return node
 
 
 def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -173,16 +210,18 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
             # Replace the current population by the offspring
             population[:] = offspring
 
-            # Update the statistics with the new population
-            if stats is not None:
-                stats.update(population)
+        # -- Uptading stats only on last population from the list:
 
-            if verbose:
-                logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
+        # Update the statistics with the new population
+        if stats is not None:
+            stats.update(population)
+
+        if verbose:
+            logger.logGeneration(evals=len(invalid_ind), gen=gen, stats=stats)
 
         # ===== MetaGA part: updating mutation probabilities =====
 
-        # List of best individuals:
+        # List of best individuals from each population:
         best_individuals = [sorted(pop, key=attrgetter("fitness"), reverse=True)[0]
                             for pop in populations]
 
@@ -199,10 +238,11 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
 
             # Adding all matches to the weight matrix:
             for m in chain(matches, reverse_matches):
+                # Getting a list of the nodes from this match:
                 nodes = tuple(i0[m.a:(m.a + m.size)])
+                # Updating the weight matrix with theses nodes:
                 shared.weight_matrix.add(nodes)
 
-        print 'L', len(shared.weight_matrix._couples), sum(shared.weight_matrix._couples.values())
-        print 'S', shared.weight_matrix.scale()
+        # print 'L', len(shared.weight_matrix._couples), sum(shared.weight_matrix._couples.values())
 
     return populations

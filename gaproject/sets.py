@@ -39,13 +39,22 @@ def get():
     #     }]
 
     return [{
-        'name': 'set1a',
+        'name': 'set1',
+        'evaluate': 'eval_simple',
+        'mutate': ('insert_mut', {'indpb': 0.05}),
+        # 'mutate': ('meta_insert', {'indpb': 0.05}),
+        'mate': 'cxNull',
+        'population': 10,
+        'generations': 300,
+        },
+        {
+        'name': 'set1-meta',
         'evaluate': 'eval_simple',
         # 'mutate': ('insert_mut', {'indpb': 0.05}),
         'mutate': ('meta_insert', {'indpb': 0.05}),
-        'mate': 'cxSCX',
-        'population': 20,
-        'generations': 500,
+        'mate': 'cxNull',
+        'population': 10,
+        'generations': 300,
         }]
 
 

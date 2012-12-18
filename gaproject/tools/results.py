@@ -71,9 +71,12 @@ class Results(object):
             return [fit[0] for fit in stats_list[0]]
 
         for run in self.find():
-            for data in run['stats']:
-                data = adjust(data['min'])
-                plt.plot(data, 'b-')
+            # plt.figure()
+
+            data = adjust(run['stats'][0]['min'])
+            # for data in run['stats']:
+            #     data = adjust(data['min'])
+            #     plt.plot(data, 'b-')
 
             # Plotting average:
             plt.plot(
@@ -82,10 +85,11 @@ class Results(object):
                  for i in xrange(len(data))],
                 'r-')
 
-            plt.title(run['set']['name'])
-            plt.xlabel('Generations')
-            plt.ylabel('Fitness')
-            plt.show()
+            # plt.title(run['set']['name'])
+            # plt.xlabel('Generations')
+            # plt.ylabel('Fitness')
+        plt.show(block=False)
+        raw_input('end ?')
 
     def plotDifferentRuns(self):
         ''' Generates plots for multiple results (across several runs) in the DB.
@@ -97,10 +101,10 @@ class Results(object):
 
         #set a color cycle for 20 possible colors
         colormap = plt.cm.gist_ncar
-        plt.gca().set_color_cycle([colormap(i) for i in linspace(0, 0.9, 20)])  
+        plt.gca().set_color_cycle([colormap(i) for i in linspace(0, 0.9, 20)])
 
         plt.figure()
-        
+
         for run in self.find():
             cmin = [0] * len(adjust(run['stats'][0]['min']))
             for data in run['stats']:

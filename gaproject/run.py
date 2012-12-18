@@ -40,7 +40,7 @@ def run(data, operators):
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
-        if shared.settings.meta_ga is False:
+        if shared.settings.meta_ga in (False, 0, 1):
             pop = toolbox.population(n=population)
             algo = algorithms.eaSimple
             pop, stats, hof = mydeap.run(algo,

@@ -9,6 +9,11 @@ cxOrdered = tools.cxOrdered
 cxPMX = tools.cxPartialyMatched
 
 
+def cxNull(individual1, individual2):
+    'The awesome Null crossover which does nothing.'
+    return individual1, individual2
+
+
 def cxHeuristic(individual1, individual2):
     child1 = cxHeuristic(individual1,individual2).crossover()
     child2 = cxHeuristic(individual2,individual1).crossover()
@@ -108,7 +113,7 @@ def cxSimpleSCX(individual1, individual2):
     localHillClimbing = False
     sequenceOfNodes = range(len(individual1))
     child1 = CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
-    child2 =  CXSCXCalculator(individual2, individual1, sequenceOfNodes, localHillClimbing).crossover()    
+    child2 =  CXSCXCalculator(individual2, individual1, sequenceOfNodes, localHillClimbing).crossover()
     individual1[:] = child1[:]
     individual2[:] = child2[:]
     return individual1, individual2
@@ -221,7 +226,7 @@ class CXERXCalculator:
     def __init__(self, individual1, individual2):
         self.individual2 = individual2
         self.individual1 = individual1
-        
+
 
     def crossover(self):
         child1 = self._createChild(self.individual1, self.individual2)
@@ -275,7 +280,7 @@ class CXERXCalculator:
                 else:
                     #chose as next node any remaining node at random
                     currentNode = self.edgeMap.keys()[random.randint(0, len(self.edgeMap.keys()) - 1)]
-        
+
         return child
 
     def _buildEdgeMap(self,individual1,individual2):
@@ -309,7 +314,8 @@ class CXERXCalculator:
                 edgeMapEntriesToBeRemoved.remove(node)
 
 
-__all__ = (cxERX,
+__all__ = (cxNull,
+           cxERX,
            cxHeuristic,
            cxSimpleSCX,
            cxEnhancedSCX,

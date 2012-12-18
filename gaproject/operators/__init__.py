@@ -30,6 +30,7 @@ alias = {
 
     'meta_insert': mutators.insertionMutationMetaGA,
 
+    'cxNull': crossovers.cxNull,
     'cxOX': crossovers.cxOrdered,
     'cxHeuristic': crossovers.cxHeuristic,
     'cxSCX': crossovers.cxSimpleSCX,

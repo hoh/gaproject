@@ -59,15 +59,14 @@ def insertionMutationMetaGA(ind, indpb):
     depends on the weight matrix from MetaGA.
     """
     size = len(ind)
-    scale = shared.weight_matrix.scale()
+
+    # Computing weigths and the scaling factor for normalization:
+    weights = [shared.weight_matrix.node_weight(node, ind) for node in ind]
+    scale = size / sum(weights)
+
+    # Randomly mutating characters:
     for i in xrange(size):
-
-        couple1 = (ind[i - 1], ind[i])
-        couple2 = (ind[(i + 1) % len(ind)], ind[i])
-        w = shared.weight_matrix.weight(couple1, unsorted=True) \
-          * shared.weight_matrix.weight(couple2, unsorted=True)
-
-        if random.random() < indpb * w * scale:
+        if random.random() < indpb * weights[i] * scale:
             indexRandomNode = i
             insertionPoint = random.randint(0, len(ind) - 1)
             removedValue = ind.pop(indexRandomNode)
