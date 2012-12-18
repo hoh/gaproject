@@ -12,6 +12,7 @@ from gaproject.data import Box
 from gaproject.tools.results import Results
 from gaproject.tools.optimizer import Optimizer
 from gaproject.tools.benchmarker import Benchmarker
+from gaproject.tools.repr_comparator import RComparator
 
 
 class Main(object):
@@ -104,6 +105,11 @@ class Main(object):
         'Launches benchmarking.'
         benchmark = Benchmarker()
         benchmark.go()
+
+    def compare(self):
+        'Launches the comparison of adjacent and path representation.'
+        compare = RComparator()
+        compare.go()
 
 if __name__ == '__main__':
     Main(sys.argv)

@@ -51,9 +51,9 @@ class Benchmarker(object):
             job['name'] = 'bmark-{}'.format(problem)
 
             #4. launch job
-            best = self.launcher.launch_queue([job],plot_all=True)
+            best = self.launcher.launch_queue([job], plot_all=True)
             # plot solution
-            analysis.plot(best['best'][0],data)
+            analysis.plot(best['best'][0], data)
 
         print 'done!'
         raw_input()
