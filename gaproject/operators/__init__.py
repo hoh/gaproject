@@ -24,7 +24,7 @@ alias = {
     'simple_inv': mutators.simpleInversionMutation,
 
     'invert_mut_adj': mutators.inversionMutationAdj,
-    'inset_mut_adj': mutators.insertionMutationAdj,
+    'insert_mut_adj': mutators.insertionMutationAdj,
     'simple_inv_adj': mutators.simpleInversionMutationAdj,
     'mutshuf_adj': mutators.mutShuffleIndexesAdj,
 

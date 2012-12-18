@@ -1,5 +1,5 @@
 
-from numpy import average, std
+from numpy import average, std, linspace
 
 from prettytable import PrettyTable
 from gaproject.store import Store
@@ -84,7 +84,32 @@ class Results(object):
 
             plt.title(run['set']['name'])
             plt.xlabel('Generations')
-            plt.ylabel('Min. fitness')
+            plt.ylabel('Fitness')
             plt.show()
 
+    def plotDifferentRuns(self):
+        ''' Generates plots for multiple results (across several runs) in the DB.
+        '''
 
+        def adjust(stats_list):
+            'Transforms the list found in stats to a plottable list.'
+            return [fit[0] for fit in stats_list[0]]
+
+        #set a color cycle for 20 possible colors
+        colormap = plt.cm.gist_ncar
+        plt.gca().set_color_cycle([colormap(i) for i in linspace(0, 0.9, 20)])  
+
+        plt.figure()
+        
+        for run in self.find():
+            cmin = [0] * len(adjust(run['stats'][0]['min']))
+            for data in run['stats']:
+                min_list = data['min']
+                min_list = adjust(min_list)
+                cmin = [(x + y) for x, y in zip(min_list, cmin)]
+            plot_cmin = [fit / len(run['stats']) for fit in cmin]
+            plt.plot(plot_cmin, label=run['set']['name'])
+        plt.xlabel('Generations')
+        plt.ylabel('Fitness')
+        plt.legend()
+        plt.show(block=False)
