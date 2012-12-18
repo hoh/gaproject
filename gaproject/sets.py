@@ -25,8 +25,8 @@ defaults = {
 
 def get():
     'Returns a list or generator of jobs to be executed.'
-    s = Store()
-    return s.jobs.find()
+    # s = Store()
+    # return s.jobs.find()
 
     # return [{
     #     'name': 'set1adj',
@@ -38,13 +38,13 @@ def get():
     #     'mate': 'cxHeuristic',
     #     }]
 
-    # return [{
-    #     'name': 'set1a',
-    #     'evaluate': 'eval_simple',
-    #     'mutate': ('mutshuf', {'indpb': 0.05}),
-    #     'population': 10,
-    #     'generations': 1000,
-    #     }]
+    return [{
+        'name': 'set1a',
+        'evaluate': 'eval_simple',
+        'mutate': ('mutshuf', {'indpb': 0.05}),
+        'population': 50,
+        'generations': 1000,
+        }]
 
 
 def evaluate(set):

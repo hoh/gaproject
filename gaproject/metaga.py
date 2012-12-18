@@ -15,12 +15,50 @@ the needs of the current problem.
 '''
 
 from difflib import SequenceMatcher
-from pprint import pprint
+from itertools import combinations, chain
 
 from operator import attrgetter
 
 import deap.tools as tools
 from deap.algorithms import varAnd
+
+import gaproject.shared as shared
+
+
+class WeightMatrix(object):
+    '''This class is used to store and retrieve weights between two nodes.
+
+    At the moment, it uses a dictionnary to store the nodes.
+    '''
+
+    def __init__(self):
+        self._couples = {}
+
+    def __getitem__(self, couple):
+        '''Returns the weight for the given two nodes, in any order.
+        Defaults to zero.
+        '''
+        return self._couples.get(couple, 0)
+
+    def __contains__(self, couple):
+        return couple in self._couples
+
+    def __setitem__(self, couple, weight):
+        self._couples[couple] = weight
+
+    def __delitem__(self, couple):
+        del self._couples[couple]
+
+    def add(self, vector):
+        '''Updates the weights matrix from the values of the vector.
+
+        At the moment, gives a weight of then size of the vector and
+        sums up over all iterations.'''
+        for couple in combinations(vector, 2):
+            if couple in self:
+                self[couple] += len(vector)
+            else:
+                self[couple] = len(vector)
 
 
 def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -125,13 +163,22 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
         best_individuals = [sorted(pop, key=attrgetter("fitness"), reverse=True)[0]
                             for pop in populations]
 
-        # Computing matches and reverse-matches:
-        matcher = SequenceMatcher(None, best_individuals[0], best_individuals[1])
-        matches = matcher.get_matching_blocks()
-        print [i.size for i in matches if i.size > 1]
-        # Reverting one of the individuals:
-        reverse_matcher = SequenceMatcher(None, best_individuals[0][::-1], best_individuals[1])
-        reverse_matches = reverse_matcher.get_matching_blocks()
-        print [i.size for i in reverse_matches if i.size > 1]
+        shared.weight_matrix = WeightMatrix()
+        # Computing matches for every combination of individuals:
+        for i0, i1 in combinations(best_individuals, 2):
+
+            # Computing matches and reverse-matches:
+            matcher = SequenceMatcher(None, i0, i1)
+            matches = [i for i in matcher.get_matching_blocks() if i.size > 1]
+            # Reverting one of the individuals:
+            reverse_matcher = SequenceMatcher(None, i0[::-1], i1)
+            reverse_matches = [i for i in reverse_matcher.get_matching_blocks() if i.size > 1]
+
+            # Adding all matches to the weight matrix:
+            for m in chain(matches, reverse_matches):
+                nodes = tuple(i0[m.a:(m.a + m.size)])
+                shared.weight_matrix.add(nodes)
+
+        print 'L', len(shared.weight_matrix._couples), sum(shared.weight_matrix._couples.values())
 
     return populations

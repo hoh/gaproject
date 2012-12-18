@@ -49,7 +49,7 @@ class Optimizer(object):
             job = base.copy()
             job['name'] = 'pop-{}'.format(pop)
             job['population'] = pop
-            job['generations'] = 50000 / pop
+            job['generations'] = 10000 / pop
             jobs.append(job)
 
         best = self.launch_queue(jobs)['set']
