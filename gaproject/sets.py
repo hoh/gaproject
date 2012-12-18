@@ -41,9 +41,11 @@ def get():
     return [{
         'name': 'set1a',
         'evaluate': 'eval_simple',
-        'mutate': ('mutshuf', {'indpb': 0.05}),
-        'population': 50,
-        'generations': 1000,
+        # 'mutate': ('insert_mut', {'indpb': 0.05}),
+        'mutate': ('meta_insert', {'indpb': 0.05}),
+        'mate': 'cxSCX',
+        'population': 20,
+        'generations': 500,
         }]
 
 
