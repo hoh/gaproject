@@ -13,7 +13,7 @@ class Settings(object):
         self.generations = 101
         self.population = 101
         self.loop_removal = True
-        self.repetitions = 1
+        self.repetitions = 3
         self.cxpb = 0.75
         self.mutpb = 0.25
         self.meta_ga = 4

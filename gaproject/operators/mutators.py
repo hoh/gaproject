@@ -10,6 +10,8 @@ from gaproject.tools.adjacent import fromAdjacentToPath
 from gaproject.tools.adjacent import fromPathToAdjacent
 from gaproject.tools.adjacent import checkIfValidAdjacent
 
+import gaproject.shared as shared
+
 # Importing the mutator from DEAP
 from deap import tools
 mutShuffleIndexes = loop_removal(tools.mutShuffleIndexes)
@@ -48,6 +50,30 @@ def insertionMutation(individual, indpb):
             individual.insert(insertionPoint, removedValue)
 
     return individual,
+
+
+@loop_removal
+def insertionMutationMetaGA(ind, indpb):
+    """
+    Insertion Mutation where the probability to mutate a random node
+    depends on the weight matrix from MetaGA.
+    """
+    size = len(ind)
+    scale = shared.weight_matrix.scale()
+    for i in xrange(size):
+
+        couple1 = (ind[i - 1], ind[i])
+        couple2 = (ind[(i + 1) % len(ind)], ind[i])
+        w = shared.weight_matrix.weight(couple1, unsorted=True) \
+          * shared.weight_matrix.weight(couple2, unsorted=True)
+
+        if random.random() < indpb * w * scale:
+            indexRandomNode = i
+            insertionPoint = random.randint(0, len(ind) - 1)
+            removedValue = ind.pop(indexRandomNode)
+            ind.insert(insertionPoint, removedValue)
+
+    return ind,
 
 
 @loop_removal
@@ -102,6 +128,7 @@ __all__ = (mutShuffleIndexes,
            insertionMutation,
            inversionMutation,
            simpleInversionMutation,
+           insertionMutationMetaGA,
            insertionMutationAdj,
            inversionMutationAdj,
            simpleInversionMutationAdj,

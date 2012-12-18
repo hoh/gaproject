@@ -28,10 +28,12 @@ alias = {
     'simple_inv_adj': mutators.simpleInversionMutationAdj,
     'mutshuf_adj': mutators.mutShuffleIndexesAdj,
 
+    'meta_insert': mutators.insertionMutationMetaGA,
+
     'cxOX': crossovers.cxOrdered,
     'cxHeuristic': crossovers.cxHeuristic,
     'cxSCX': crossovers.cxSimpleSCX,
     'cxESCX': crossovers.cxEnhancedSCX,
     'cxERX': crossovers.cxERX,
-    'cxPMX': crossovers.cxPMX
+    'cxPMX': crossovers.cxPMX,
     }

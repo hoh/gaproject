@@ -31,14 +31,17 @@ class WeightMatrix(object):
     At the moment, it uses a dictionnary to store the nodes.
     '''
 
-    def __init__(self):
+    def __init__(self, size):
         self._couples = {}
+        self._size = size
+        # _max_size = number of possible combinations:
+        self._max_size = ((self._size ** 2) - self._size) / 2
 
     def __getitem__(self, couple):
         '''Returns the weight for the given two nodes, in any order.
         Defaults to zero.
         '''
-        return self._couples.get(couple, 0)
+        return self._couples.get(couple, 1)
 
     def __contains__(self, couple):
         return couple in self._couples
@@ -59,6 +62,24 @@ class WeightMatrix(object):
                 self[couple] += len(vector)
             else:
                 self[couple] = len(vector)
+
+    def scale(self):
+        '''Returns a scaling factor for the weight matrix, namely
+        the size of an individual divided by probability for each node.
+        '''
+        # Summ of value for couples present:
+        sum_factors = sum([(1. / n) for n in self._couples.values()])
+        # 1 * number of couples not present:
+        sum_rest = (self._max_size - len(self._couples))
+
+        return float(self._max_size) / (sum_factors + sum_rest)
+
+    def weight(self, couple, unsorted=False):
+        '''Returns a probability associated to the given couple.
+        '''
+        if unsorted:
+            couple = tuple(sorted(couple))
+        return 1. / self[couple]
 
 
 def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -107,6 +128,8 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
     .. [Back2000] Back, Fogel and Michalewicz, "Evolutionary Computation 1 :
        Basic Algorithms and Operators", 2000.
     """
+
+    shared.weight_matrix = WeightMatrix(size=len(populations[0][0]))
 
     for population in populations:
         # Evaluate the individuals with an invalid fitness
@@ -163,7 +186,7 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
         best_individuals = [sorted(pop, key=attrgetter("fitness"), reverse=True)[0]
                             for pop in populations]
 
-        shared.weight_matrix = WeightMatrix()
+        shared.weight_matrix = WeightMatrix(size=shared.data.size())
         # Computing matches for every combination of individuals:
         for i0, i1 in combinations(best_individuals, 2):
 
@@ -180,5 +203,6 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
                 shared.weight_matrix.add(nodes)
 
         print 'L', len(shared.weight_matrix._couples), sum(shared.weight_matrix._couples.values())
+        print 'S', shared.weight_matrix.scale()
 
     return populations
