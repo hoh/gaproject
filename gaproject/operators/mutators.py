@@ -33,8 +33,6 @@ def mutationFromAdjacentToPath(function):
         return individual
     return wrapped
 
-mutShuffleIndexesAdj = mutationFromAdjacentToPath(mutShuffleIndexes)
-
 
 @loop_removal
 def insertionMutation(individual, indpb):
@@ -50,8 +48,6 @@ def insertionMutation(individual, indpb):
             individual.insert(insertionPoint, removedValue)
 
     return individual,
-
-insertionMutationAdj = mutationFromAdjacentToPath(insertionMutation)
 
 
 @loop_removal
@@ -78,8 +74,6 @@ def inversionMutation(individual, indpb):
 
     return individual,
 
-inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
-
 
 @loop_removal
 def simpleInversionMutation(individual, indpb):
@@ -98,8 +92,11 @@ def simpleInversionMutation(individual, indpb):
 
     return individual,
 
+# Creating Adjascent representation mutators:
+mutShuffleIndexesAdj = mutationFromAdjacentToPath(mutShuffleIndexes)
+insertionMutationAdj = mutationFromAdjacentToPath(insertionMutation)
+inversionMutationAdj = mutationFromAdjacentToPath(inversionMutation)
 simpleInversionMutationAdj = mutationFromAdjacentToPath(simpleInversionMutation)
-
 
 __all__ = (mutShuffleIndexes,
            insertionMutation,
