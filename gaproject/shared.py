@@ -10,12 +10,8 @@ class Settings(object):
 
     def __init__(self):
         self.plot = 'plot' in sys.argv
-        self.generations = 101
-        self.population = 101
         self.loop_removal = True
-        self.repetitions = 10
-        self.cxpb = 0.75
-        self.mutpb = 0.25
+        # Number of populations for MetaGA, use False or 1 to disable:
         self.meta_ga = 4
 
     def __getitem__(self, name):

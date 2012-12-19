@@ -4,9 +4,10 @@ This (sub-)library contains the operators used for this TSP problem.
 '''
 
 # import gaproject.operators.evaluators as evaluators
-import mutators as mutators
-import evaluators as evaluators
-import crossovers as crossovers
+import mutators
+import evaluators
+import crossovers
+import selectors
 import creators
 
 # The aliases contain the nicknames used to refer to the operators
@@ -37,4 +38,6 @@ alias = {
     'cxESCX': crossovers.cxEnhancedSCX,
     'cxERX': crossovers.cxERX,
     'cxPMX': crossovers.cxPMX,
+
+    'selTournament': selectors.selTournament,
     }

@@ -31,11 +31,11 @@ def run(data, operators):
     toolbox = mydeap.toolbox(len(data), operators)
 
     # Getting main parameters from operators of default from settings:
-    population = settings.fallback(operators, 'population')
-    generations = settings.fallback(operators, 'generations')
-    repetitions = settings.fallback(operators, 'repetitions')
-    cxpb = settings.fallback(operators, 'cxpb')
-    mutpb = settings.fallback(operators, 'mutpb')
+    population = operators['population']
+    generations = operators['generations']
+    repetitions = operators['repetitions']
+    cxpb = operators['cxpb']
+    mutpb = operators['mutpb']
 
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)

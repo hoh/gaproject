@@ -45,7 +45,7 @@ def insertionMutation(individual, indpb):
     for i in xrange(size):
         if random.random() < indpb:
             indexRandomNode = i
-            insertionPoint = random.randint(0, len(individual) - 1)
+            insertionPoint = random.randint(0, len(individual) - 1)  # TODO: choose depending on weight matrix
             removedValue = individual.pop(indexRandomNode)
             individual.insert(insertionPoint, removedValue)
 

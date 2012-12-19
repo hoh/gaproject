@@ -4,7 +4,8 @@ run.
 '''
 
 from gaproject.operators import alias
-from gaproject.store import Store
+# from gaproject.store import Store
+from deap import tools
 
 # future:
 # def insert(...)
@@ -18,8 +19,10 @@ defaults = {
     'population': 100,
     'generations': 100,
     'indices': 'path_creator',
-    'cxpb': 0.73,
-    'mutpb': 0.23,
+    'cxpb': 0.70,
+    'mutpb': 0.20,
+    'select': (tools.selTournament, {'tournsize': 3}),
+    'repetitions': 1,
 }
 
 
@@ -28,24 +31,15 @@ def get():
     # s = Store()
     # return s.jobs.find()
 
-    # return [{
-    #     'name': 'set1adj',
-    #     'evaluate': 'eval_adjacent',
-    #     'mutate': ('mutshuf_adj', {'indpb': 0.05}),
-    #     'population': 10,
-    #     'generations': 1000,
-    #     'indices': 'adj_creator',
-    #     'mate': 'cxHeuristic',
-    #     }]
-
-    return [{
+    sets = [{
         'name': 'set1',
         'evaluate': 'eval_simple',
         'mutate': ('insert_mut', {'indpb': 0.05}),
         # 'mutate': ('meta_insert', {'indpb': 0.05}),
         'mate': 'cxNull',
-        'population': 10,
-        'generations': 300,
+        'population': 20,
+        'generations': 5000,
+        'select': ('selTournament', {'tournsize': 1}),
         },
         {
         'name': 'set1-meta',
@@ -53,9 +47,17 @@ def get():
         # 'mutate': ('insert_mut', {'indpb': 0.05}),
         'mutate': ('meta_insert', {'indpb': 0.05}),
         'mate': 'cxNull',
-        'population': 10,
-        'generations': 300,
+        'population': 20,
+        'generations': 5000,
+        'select': ('selTournament', {'tournsize': 1}),
         }]
+
+    def copy_and_update(set):
+        copy = defaults.copy()
+        copy.update(set)
+        return copy
+
+    return [copy_and_update(set) for set in sets]
 
 
 def evaluate(set):
@@ -76,7 +78,7 @@ def evaluate(set):
         }
 
     # Integer values, no need to go through alias:
-    for key in ('population', 'generations', 'cxpb', 'mutpb'):
+    for key in ('population', 'generations', 'cxpb', 'mutpb', 'repetitions'):
         if key in d:
             result[key] = d[key]
 

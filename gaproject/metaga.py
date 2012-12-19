@@ -85,12 +85,14 @@ class WeightMatrix(object):
 
     def weight(self, couple, unsorted=False):
         '''Returns a probability associated to the given couple.
+        Has to be sorted or give 'unserted=True'.
         '''
         if unsorted:
             couple = tuple(sorted(couple))
 
-        f = 1. / self[couple]
-        return 1 - ((1 - f) / 4)
+        w = 1. / self[couple]
+        return w ** 0.5
+        # return 1 - ((1 - w) ** 0.5)
 
     def node_weight(self, node, ind):
         '''Computes the weight of removing the given node from the
@@ -117,6 +119,18 @@ class WeightMatrix(object):
             current += weights
             if current > pick:
                 return node
+
+    def next_to(self, node):
+        '''Returns a list of nodes in the order of probability they would
+        appear after the given node.
+        '''
+        results = []
+        for key in self._couples:
+            if node in key:
+                other_node = key[0] if key[0] != node else key[1]
+                weight = self.weight((node, other_node), unsorted=True)
+                results.append((other_node, weight))
+        return sorted(results, key=lambda x: x[1])
 
 
 def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
@@ -244,5 +258,5 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
                 shared.weight_matrix.add(nodes)
 
         # print 'L', len(shared.weight_matrix._couples), sum(shared.weight_matrix._couples.values())
-
+        print shared.weight_matrix.next_to(1)
     return populations
