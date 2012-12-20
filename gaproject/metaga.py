@@ -94,6 +94,18 @@ class WeightMatrix(object):
         return w ** 0.5
         # return 1 - ((1 - w) ** 0.5)
 
+    def scaled_weight(self, couple, unsorted=False):
+        '''Returns a probability associated to the given couple.
+        Has to be sorted or give 'unserted=True'.
+        '''
+        if unsorted:
+            couple = tuple(sorted(couple))
+
+        def scale(value):
+            return (1. / value) ** 0.5
+
+        return scale(self[couple])
+
     def node_weight(self, node, ind):
         '''Computes the weight of removing the given node from the
         given individual.
