@@ -12,7 +12,7 @@ import logging
 import random
 
 from gaproject.store import Store
-import gaproject.launcher
+import gaproject.worker.launcher
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -57,12 +57,23 @@ class Worker(object):
 
     def save_result(self, job, result):
         "Pushes the result of a run in the DB."
-        out = open(os.path.join(RESULTS_DIRECTORY, unicode(job['_id'])), 'w')
-        json.dump(result, out)
+        out_dir = os.path.join(RESULTS_DIRECTORY, unicode(job['_id']))
+        os.mkdir(out_dir)
+
+        # Saving results as JSON file on disk:
+        data_out = open(os.path.join(out_dir, 'data.json'), 'w')
+        json.dump(result, data_out)
+
+        # Saving job as JSON file on disk:
+        job_out = open(os.path.join(out_dir, 'job.json'), 'w')
+        # Converting job _id to string:
+        jobb = job.copy()
+        jobb['_id'] = str(job['_id'])
+        json.dump(jobb, job_out)
 
     def process(self, job):
         "Processes the given job."
-        result = gaproject.launcher.process(job)
+        result = gaproject.worker.launcher.process(job)
         logging.info('processed')
         return result
 

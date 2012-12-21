@@ -47,7 +47,7 @@ def plot_fitness(stats):
 
 
 def plot(job):
-    job_result_path = os.path.join(RESULTS_DIRECTORY, str(job['_id']))
+    job_result_path = os.path.join(RESULTS_DIRECTORY, str(job['_id']), 'data.json')
     job_result = json.load(open(job_result_path))
 
     box = Box('data/TSPBenchmark')

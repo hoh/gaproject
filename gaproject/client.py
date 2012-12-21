@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 class Client(object):
 
-    default = {
+    _default = {
         'operators': {
             'population': 100,
             },
@@ -36,7 +36,7 @@ class Client(object):
     def input_job(self):
         "Asks for a job using raw_input."
         # Creating new job:
-        job = self.default.copy()
+        job = self._default.copy()
 
         # Getting user-defined operators:
         ops = self.default['operators']
