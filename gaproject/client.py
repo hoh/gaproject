@@ -12,7 +12,12 @@ logging.basicConfig(level=logging.DEBUG)
 class Client(object):
 
     default = {
-        'population': 100,
+        'operators': {
+            'population': 100,
+            },
+
+        'status': 'available',
+        'data': 'belgiumtour.tsp',
     }
 
     def __init__(self):
@@ -26,19 +31,29 @@ class Client(object):
         logging.debug('insertion done')
 
     def validate(self, job):
-        assert 'population' in job
+        assert 'population' in job['operators']
 
     def input_job(self):
         "Asks for a job using raw_input."
-        job = {}
-        for key in self.default:
-            typ = type(self.default[key])
+        # Creating new job:
+        job = self.default.copy()
+
+        # Getting user-defined operators:
+        ops = self.default['operators']
+        operators = {}
+
+        for key in ops:
+            val = ops[key]
+            typ = type(val)
             while 1:
                 try:
-                    job[key] = typ(raw_input('{}: '.format(key)))
+                    value = raw_input('{} [{}]: '.format(key, val))
+                    operators[key] = typ(value) if value else val
                     break
                 except ValueError, error:
                     print 'Error:', error
+
+        job['operators'] = operators
         self.add_job(job)
 
 if __name__ == '__main__':

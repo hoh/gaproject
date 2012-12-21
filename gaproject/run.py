@@ -78,6 +78,7 @@ def run(data, operators):
     return result
 
 
+# Deprecated !
 def main(data):
     'Launches all runs.'
 

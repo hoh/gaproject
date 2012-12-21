@@ -12,6 +12,7 @@ import logging
 import random
 
 from gaproject.store import Store
+import gaproject.launcher
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -61,7 +62,7 @@ class Worker(object):
 
     def process(self, job):
         "Processes the given job."
-        result = {'test': 'It is a test.'}
+        result = gaproject.launcher.process(job)
         logging.info('processed')
         return result
 

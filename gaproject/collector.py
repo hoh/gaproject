@@ -6,6 +6,7 @@ import time
 import logging
 
 from gaproject.store import Store
+import gaproject.collector.plotter as plotter
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -20,7 +21,12 @@ class Collector(object):
         self.queue = self.store.queue
 
     def process(self, job):
-        print 'Awesome, we got a result !'
+        "Main action done when received a result."
+        logging.info('collecting job')
+        print '=' * 10, 'job'
+        print job
+        plotter.plot(job)
+        print '-' * 10
 
     def find_jobs(self):
         "Finds a completed job in the queue."
