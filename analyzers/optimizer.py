@@ -111,11 +111,11 @@ class Optimizer(object):
 
         print 'Optimizing population'
         jobs = []
-        for pop in range(1, 100, 20):
+        for pop in range(1, 1000, 20):
             job = make_job(self.base_job,
                            {'name': 'pop-{}'.format(pop),
                             'population': pop,
-                            'generations': 100 / pop,
+                            'generations': 10000 / pop,
                            })
             jobs.append(job)
 
@@ -123,7 +123,7 @@ class Optimizer(object):
 
         print 'Optimizing cxpb'
         jobs = []
-        for cxpb in xrange(1, 100, 20):
+        for cxpb in xrange(1, 100, 5):
             job = make_job(best_job,
                            {'name': '{}-{}'.format(best_job['operators']['name'], cxpb / 100.),
                             'cxpb': cxpb / 100.,
