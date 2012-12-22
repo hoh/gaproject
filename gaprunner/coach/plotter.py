@@ -1,9 +1,9 @@
 '''
 Used in the Queue system to plot results.
+
 '''
 
 import json
-import numpy
 import os.path
 
 import matplotlib.pyplot as plt

@@ -192,6 +192,8 @@ def eaMeta(populations, toolbox, cxpb, mutpb, ngen, stats=None,
        Basic Algorithms and Operators", 2000.
     """
 
+    verbose = False
+
     shared.weight_matrix = WeightMatrix(size=len(populations[0][0]))
 
     for population in populations:

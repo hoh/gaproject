@@ -22,7 +22,7 @@ defaults = {
     'cxpb': 0.70,
     'mutpb': 0.20,
     'select': (tools.selTournament, {'tournsize': 3}),
-    'repetitions': 1,
+    'repetitions': 2,
 }
 
 

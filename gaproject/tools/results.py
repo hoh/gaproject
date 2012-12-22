@@ -14,16 +14,16 @@ class RunTable(PrettyTable):
             field_names=['name', 'n', 'fit avg', 'fit std', 'pop', 'gen', 'mutator', 'cx']
             )
 
-    def add_run(self, run):
+    def add_run(self, job, data):
         self.add_row([
-            run['set']['name'],
-            len(run['fitness']),
-            average(run['fitness']),
-            std(run['fitness']),
-            run['set']['population'],
-            run['set']['generations'],
-            run['set'].get('mutate', [''])[0],
-            run['set'].get('mate', ''),
+            job['operators']['name'],
+            len(data['fitness']),
+            average(data['fitness']),
+            std(data['fitness']),
+            job['operators']['population'],
+            job['operators']['generations'],
+            job['operators'].get('mutate', [''])[0],
+            job['operators'].get('mate', ''),
             ])
 
 

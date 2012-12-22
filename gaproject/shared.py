@@ -12,15 +12,11 @@ class Settings(object):
         self.plot = 'plot' in sys.argv
         self.loop_removal = True
         # Number of populations for MetaGA, use False or 1 to disable:
-        self.meta_ga = 4
+        self.metaGA = 4
 
     def __getitem__(self, name):
         'Allows Settings to be used as a dictionary as well.'
         return self.__getattribute__(name)
-
-    def fallback(self, dico, key):
-        'Returns dico[key] or fallbacks to self.key.'
-        return dico.get(key, settings[key])
 
 settings = Settings()
 

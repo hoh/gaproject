@@ -21,6 +21,9 @@ def process(job):
     box = Box('data/TSPBenchmark')
     shared.data = box.get(job['data'])
 
+    if 'metaGA' in job:
+        shared.settings.metaGA = job['metaGA']
+
     # TODO: Refactor the following:
     shared.orderedSequenceOfNodes = shared.data.nodesOrderedByMedian(shared.data.dist_matrix())
 

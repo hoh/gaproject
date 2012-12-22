@@ -12,7 +12,7 @@ import logging
 import random
 
 from gaproject.store import Store
-import gaproject.worker.launcher
+import gaprunner.worker.launcher as launcher
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -58,7 +58,8 @@ class Worker(object):
     def save_result(self, job, result):
         "Pushes the result of a run in the DB."
         out_dir = os.path.join(RESULTS_DIRECTORY, unicode(job['_id']))
-        os.mkdir(out_dir)
+        if not os.path.isdir(out_dir):
+            os.mkdir(out_dir)
 
         # Saving results as JSON file on disk:
         data_out = open(os.path.join(out_dir, 'data.json'), 'w')
@@ -73,7 +74,7 @@ class Worker(object):
 
     def process(self, job):
         "Processes the given job."
-        result = gaproject.worker.launcher.process(job)
+        result = launcher.process(job)
         logging.info('processed')
         return result
 

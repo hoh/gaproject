@@ -40,7 +40,7 @@ def run(data, operators):
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
-        if shared.settings.meta_ga in (False, 0, 1):
+        if shared.settings.metaGA in (False, 0, 1):
             pop = toolbox.population(n=population)
             algo = algorithms.eaSimple
             pop, stats, hof = mydeap.run(algo,
@@ -51,7 +51,7 @@ def run(data, operators):
                                          cxpb,
                                          mutpb)
         else:
-            pops = [toolbox.population(n=population) for i in xrange(settings.meta_ga)]
+            pops = [toolbox.population(n=population) for i in xrange(settings.metaGA)]
             algo = metaga.eaMeta
             pop, stats, hof = mydeap.run(algo,
                                          pops,
