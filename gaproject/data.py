@@ -6,7 +6,7 @@ import math
 try:
     import numpypy  # Will do monkey-patching on Numpy for Pypy.
 
-    def median(mylist):
+    def median(mylist, axis=1):
         sorts = sorted(mylist)
         length = len(sorts)
         if not length % 2:
