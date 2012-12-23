@@ -26,38 +26,38 @@ defaults = {
 }
 
 
-def get():
-    'Returns a list or generator of jobs to be executed.'
-    # s = Store()
-    # return s.jobs.find()
+# def get():
+#     'Returns a list or generator of jobs to be executed.'
+#     # s = Store()
+#     # return s.jobs.find()
 
-    sets = [{
-        'name': 'set1',
-        'evaluate': 'eval_simple',
-        'mutate': ('insert_mut', {'indpb': 0.05}),
-        # 'mutate': ('meta_insert', {'indpb': 0.05}),
-        'mate': 'cxNull',
-        'population': 20,
-        'generations': 5000,
-        'select': ('selTournament', {'tournsize': 1}),
-        },
-        {
-        'name': 'set1-meta',
-        'evaluate': 'eval_simple',
-        # 'mutate': ('insert_mut', {'indpb': 0.05}),
-        'mutate': ('meta_insert', {'indpb': 0.05}),
-        'mate': 'cxNull',
-        'population': 20,
-        'generations': 5000,
-        'select': ('selTournament', {'tournsize': 1}),
-        }]
+#     sets = [{
+#         'name': 'set1',
+#         'evaluate': 'eval_simple',
+#         'mutate': ('insert_mut', {'indpb': 0.05}),
+#         # 'mutate': ('meta_insert', {'indpb': 0.05}),
+#         'mate': 'cxNull',
+#         'population': 20,
+#         'generations': 5000,
+#         'select': ('selTournament', {'tournsize': 1}),
+#         },
+#         {
+#         'name': 'set1-meta',
+#         'evaluate': 'eval_simple',
+#         # 'mutate': ('insert_mut', {'indpb': 0.05}),
+#         'mutate': ('meta_insert', {'indpb': 0.05}),
+#         'mate': 'cxNull',
+#         'population': 20,
+#         'generations': 5000,
+#         'select': ('selTournament', {'tournsize': 1}),
+#         }]
 
-    def copy_and_update(set):
-        copy = defaults.copy()
-        copy.update(set)
-        return copy
+#     def copy_and_update(set):
+#         copy = defaults.copy()
+#         copy.update(set)
+#         return copy
 
-    return [copy_and_update(set) for set in sets]
+#     return [copy_and_update(set) for set in sets]
 
 
 def evaluate(set):

@@ -2,33 +2,12 @@
 Distributed version of the analyzer.
 '''
 
-import os.path
-import copy
-import json
-
 from numpy import average
 
-from gaprunner.coach import Coach
-from gaproject.tools.launcher import Launcher
-from gaproject.tools.results import RunTable
+from __init__ import make_job, Analyzer, job_data
 
 
-def job_data(job):
-    # Directory where the results have been saved:
-    RESULTS_DIRECTORY = os.path.expanduser('~/GAP_results')
-    data_path = os.path.join(RESULTS_DIRECTORY, str(job['_id']), 'data.json')
-    return json.load(open(data_path))
-
-
-def make_job(base, new_operators):
-    job = copy.deepcopy(base)
-    # Resetting the status of the job, in case we reuse a result:
-    job['status'] = 'available'
-    job['operators'].update(new_operators)
-    return job
-
-
-class Optimizer(object):
+class Optimizer(Analyzer):
     'Main class for parameter optimization.'
 
     # Default values for job parameters:
@@ -54,13 +33,6 @@ class Optimizer(object):
                 },
             }
 
-    def __init__(self):
-        self.launcher = Launcher()
-
-    def launch(self, jobs):
-        coach = Coach(jobs)
-        return coach.loop(bg=False)
-
     def best_job(self, jobs):
         best_job = jobs[0]
         best_data = job_data(best_job)
@@ -75,14 +47,8 @@ class Optimizer(object):
                 best_avg = run_avg
         return best_job, best_data
 
-    def print_job(self, job, data):
-        print 'Best run so far:'
-        table = RunTable()
-        table.add_run(job, data)
-        print table
-
     def tournament(self, jobs):
-        'Runs the jobs and returns the best one'
+        'Runs the jobs and returns the best result'
         result_jobs = self.launch(jobs)
         best_job, best_data = self.best_job(result_jobs)
         self.print_job(best_job, best_data)
@@ -94,18 +60,10 @@ class Optimizer(object):
         '''
         Launches the super uber optimizer.
 
-        1. Clears queue and results.
-        2. Queues new results for variable range of interest
-        3. Executing the queue and retrieving the best result
-        4. New variable and back to [2].
-
+        Generates a range of values for a parameter, selects
+        the best result and goes to the next parameter.
         '''
         print 'Go go go !'
-
-        # self.launcher.load_data(data)
-
-        # 1. clear queue and results
-        # self.launcher.clear()
 
         # 2. Create dictionnaries for range
 
@@ -131,8 +89,6 @@ class Optimizer(object):
             jobs.append(job)
 
         best_job = self.tournament(jobs)
-
-        return
 
         print 'Optimizing indpb'
         jobs = []
