@@ -14,7 +14,10 @@ class Settings(object):
         self.loop_removal = True
         # Number of populations for MetaGA, use False or 1 to disable:
         self.metaGA = 4
-        self.filesDir = os.path.expanduser('/tmp/lithium/GAP_results')
+        if os.uname()[1] == 'okso.local':
+            self.filesDir = os.path.expanduser('/tmp/lithium/GAP_results')
+        else:
+            self.filesDir = os.path.expanduser('~/GAP_results')
 
         if not os.path.isdir(self.filesDir):
             os.mkdir(self.filesDir)

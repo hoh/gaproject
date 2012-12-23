@@ -1,6 +1,12 @@
 
 import os.path
 import math
+
+# Pypy compatibility:
+try:
+    import numpypy  # Will do monkey-patching on Numpy for Pypy.
+except ImportError, error:
+    pass
 import numpy
 
 
