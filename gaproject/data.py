@@ -5,9 +5,16 @@ import math
 # Pypy compatibility:
 try:
     import numpypy  # Will do monkey-patching on Numpy for Pypy.
+
+    def median(mylist):
+        sorts = sorted(mylist)
+        length = len(sorts)
+        if not length % 2:
+            return (sorts[length / 2] + sorts[length / 2 - 1]) / 2.0
+        return sorts[length / 2]
+
 except ImportError, error:
-    pass
-import numpy
+    from numpy import median
 
 
 def dist(point1, point2):
@@ -62,7 +69,7 @@ class Data(object):
         return len(self.positions)
 
     def nodesOrderedByMedian(self, distance_map):
-        medians = numpy.median(distance_map, axis=1)
+        medians = median(distance_map, axis=1)
         defaultSequence = range(0, len(distance_map[0]))
         mediansAndNodes = zip(medians, defaultSequence)
         sortedMedians, sequenceOfNodes = zip(*mediansAndNodes)
