@@ -7,14 +7,15 @@ import random
 from deap import algorithms
 
 from gaproject.mydeap import MyDeap
-from gaproject.analysis import plot, fitness_plot
-from gaproject.store import Store
 import gaproject.metaga as metaga
-import gaproject.sets
+
 
 # Loading settings:
 import gaproject.shared as shared
 settings = shared.settings
+
+if settings.plot:
+    from gaproject.analysis import plot, fitness_plot
 
 
 def run(data, operators):
@@ -40,7 +41,7 @@ def run(data, operators):
     for repetition in xrange(repetitions):
         random.seed(100 + repetition)
 
-        if shared.settings.metaGA in (False, 0, 1):
+        if settings.metaGA in (False, 0, 1):
             pop = toolbox.population(n=population)
             algo = algorithms.eaSimple
             pop, stats, hof = mydeap.run(algo,
@@ -63,7 +64,7 @@ def run(data, operators):
 
         print 'Best so far:', operators['evaluate'](hof[0])
 
-        if shared.settings.plot:
+        if settings.plot:
             # Plotting the best result so far:
             plot(hof[0], data)
             fitness_plot(stats)
@@ -76,27 +77,3 @@ def run(data, operators):
         result['stats'].append(stats.data)
 
     return result
-
-
-# Deprecated !
-def main(data):
-    'Launches all runs.'
-
-    shared.data = data
-    shared.orderedSequenceOfNodes = data.nodesOrderedByMedian(shared.data.dist_matrix())
-
-    if shared.settings.plot:
-        data.plot()
-
-    store = Store()
-
-    sets = gaproject.sets.get()
-    for set_ in sets:
-        print 'Running set:', set_
-
-        operators = gaproject.sets.evaluate(set_)
-        result = run(data, operators)
-        result['set'] = set_
-
-        # Puting results in DB:
-        store.runs.insert(result)

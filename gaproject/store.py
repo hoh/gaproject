@@ -15,7 +15,7 @@ from pymongo import MongoClient
 
 def Store():
     try:
-        connection = MongoClient()
+        connection = MongoClient('192.168.3.3')
         return connection['gaproject']
     except ConnectionFailure:
         print 'Error: could not connect to DB'

@@ -12,16 +12,11 @@ import logging
 import random
 
 from gaproject.store import Store
+import gaproject.shared as shared
 import gaprunner.worker.launcher as launcher
 
+
 logging.basicConfig(level=logging.DEBUG)
-
-# Directory where the results will be saved:
-RESULTS_DIRECTORY = os.path.expanduser('~/GAP_results')
-
-# Creating output directory if it does not exist:
-if not os.path.isdir(RESULTS_DIRECTORY):
-    os.mkdir(RESULTS_DIRECTORY)
 
 
 class Worker(object):
@@ -57,7 +52,7 @@ class Worker(object):
 
     def save_result(self, job, result):
         "Pushes the result of a run in the DB."
-        out_dir = os.path.join(RESULTS_DIRECTORY, unicode(job['_id']))
+        out_dir = os.path.join(shared.settings.filesDir, unicode(job['_id']))
         if not os.path.isdir(out_dir):
             os.mkdir(out_dir)
 

@@ -8,10 +8,7 @@ import os.path
 
 import matplotlib.pyplot as plt
 from gaproject.data import Box
-
-
-# Directory where the results are saved:
-RESULTS_DIRECTORY = os.path.expanduser('~/GAP_results')
+import gaproject.shared as shared
 
 
 def plot_ind(individual, data):
@@ -47,7 +44,7 @@ def plot_fitness(stats):
 
 
 def plot(job):
-    job_result_path = os.path.join(RESULTS_DIRECTORY, str(job['_id']), 'data.json')
+    job_result_path = os.path.join(shared.settings.filesDir, str(job['_id']), 'data.json')
     job_result = json.load(open(job_result_path))
 
     box = Box('data/TSPBenchmark')

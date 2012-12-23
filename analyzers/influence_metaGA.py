@@ -13,8 +13,8 @@ class Analyzer_MetaGA(Analyzer):
     # Default values for job parameters:
     base_job = {
             'status': 'available',
-            'data': 'belgiumtour.tsp',
-            'metaga': False,
+            'data': 'bcl380.tsp',
+            'metaga': 4,
 
             'operators': {
                 'name': 'default',
@@ -24,7 +24,7 @@ class Analyzer_MetaGA(Analyzer):
                 'mutate': ('insert_mut', {'indpb': 0.05}),
                 'mate': 'cxSCX',
 
-                'repetitions': 30,
+                'repetitions': 1,
 
                 'population': 20,
                 'generations': 500,
@@ -43,30 +43,28 @@ class Analyzer_MetaGA(Analyzer):
 
         plt.figure()
 
-        # Color sets for the graphics:
-        color_sets = [('y', 'r'), ('g', 'b')]
-
         for job in results_jobs:
             data = job_data(job)
             size = len(data['stats'][0]['min'][0])
 
-            color_run, color_avg = color_sets.pop()
-
-            # Plotting individual runs:
-            for d in data['stats']:
-                d = adjust(d['min'])
-                plt.plot(d, color_run + '--')
+            # # Plotting individual runs:
+            # for d in data['stats']:
+            #     d = adjust(d['min'])
+            #     plt.plot(d, color_run + '--')
 
             # Plotting average:
             plt.plot(
                 [average([adjust(d['min'])[i]
                           for d in data['stats']])
                  for i in xrange(size)],
-                color_avg + '-',
-                linewidth=2.0)
+                # color_avg + '-',
+                # linewidth=2.0,
+                label=job['operators']['name'],
+                )
 
         plt.xlabel('Generations')
         plt.ylabel('Fitness')
+        plt.legend()
         plt.show()
 
     def go(self):
@@ -74,19 +72,22 @@ class Analyzer_MetaGA(Analyzer):
         '''
         print 'Go go go'
 
-        print 'Small population'
-        jobs = [
-            make_job(self.base_job,
-                     {'population': 5,
-                      'generations': 20,
-                      'mutate': ('insert_mut', {'indpb': 0.05}),
-                      }),
-            make_job(self.base_job,
-                     {'population': 5,
-                      'generations': 20,
-                      'mutate': ('meta_insert', {'indpb': 0.05}),
-                      }),
-        ]
+        jobs = []
+        for i in range(5, 100, 10):
+            jobs.append(
+                make_job(self.base_job,
+                         {'name': '{}'.format(i),
+                          'population': i,
+                          'generations': 250,
+                          'mutate': ('insert_mut', {'indpb': 0.05}),
+                         }))
+            jobs.append(
+                make_job(self.base_job,
+                         {'name': '{}m'.format(i),
+                          'population': i,
+                          'generations': 250,
+                          'mutate': ('meta_insert', {'indpb': 0.05}),
+                         }))
 
         self.compare(jobs)
 

@@ -6,6 +6,7 @@ import json
 from os.path import expanduser, join
 
 from gaprunner.coach import Coach
+import gaproject.shared as shared
 from gaproject.tools.results import RunTable
 
 
@@ -22,8 +23,7 @@ def make_job(base, new_operators):
 
 def job_data(job):
     # Directory where the results have been saved:
-    RESULTS_DIRECTORY = expanduser('~/GAP_results')
-    data_path = join(RESULTS_DIRECTORY, str(job['_id']), 'data.json')
+    data_path = join(shared.settings.filesDir, str(job['_id']), 'data.json')
     return json.load(open(data_path))
 
 
