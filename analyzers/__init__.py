@@ -32,8 +32,8 @@ class Analyzer(object):
     Provides launch(jobs) and print_job(job, data).
     '''
 
-    def launch(self, jobs):
-            coach = Coach(jobs)
+    def launch(self, jobs, on_result=None):
+            coach = Coach(jobs, on_result)
             return coach.loop(bg=False)
 
     def print_job(self, job, data):

@@ -33,11 +33,16 @@ class Performance(Analyzer):
             }
 
     def go(self):
-        t0 = time.time()
-        jobs = [make_job(self.base_job, {})]
-        self.launch(jobs)
-        print 'TIME:', time.time() - t0
+        self.t0 = time.time()
+        jobs = [make_job(self.base_job, {}),
+                make_job(self.base_job, {}),
+                make_job(self.base_job, {}),
+                ]
+        self.launch(jobs, self.on_result)
+        print 'DONE'
 
+    def on_result(self, job):
+        print 'TIME:', time.time() - self.t0
 
 if __name__ == '__main__':
     analyzer = Performance()
