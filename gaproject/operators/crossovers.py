@@ -104,6 +104,26 @@ def cxEnhancedSCX(individual1, individual2):
     individual2[:] = child2[:]
     return individual1, individual2
 
+def cxSimpleSCXMetaGA(individual1, individual2, n=3):
+    """
+    Function that creates an instance of CXSCXCalculator and performs the simple SCX crossover
+
+    """
+    localHillClimbing = False
+    sequenceOfNodes = range(len(individual1))
+
+    # Selecting the best crossing over over 'n' trials :
+    best_score = 10**20
+    for i in xrange(n):
+        child1 = CXSCXCalculator(individual1, individual2, sequenceOfNodes, localHillClimbing).crossover()
+        child2 =  CXSCXCalculator(individual2, individual1, sequenceOfNodes, localHillClimbing).crossover()
+        score = shared.weight_matrix.score(child1) + shared.weight_matrix.score(child2)
+        if score < best_score:
+            best_child1, best_child2 = child1, child2
+
+    individual1[:] = best_child1[:]
+    individual2[:] = best_child2[:]
+    return individual1, individual2
 
 def cxSimpleSCX(individual1, individual2):
     """

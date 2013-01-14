@@ -39,5 +39,7 @@ alias = {
     'cxERX': crossovers.cxERX,
     'cxPMX': crossovers.cxPMX,
 
+    'cxSCX_meta': crossovers.cxSimpleSCXMetaGA,
+
     'selTournament': selectors.selTournament,
     }
